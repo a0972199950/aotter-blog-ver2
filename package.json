@@ -1,0 +1,37 @@
+{
+  "name": "nuxt-typescript-test",
+  "version": "1.0.0",
+  "description": "My praiseworthy Nuxt.js project",
+  "author": "a0972199950",
+  "private": true,
+  "scripts": {
+    "connect": "mongod --dbpath C:/Users/a0972/mongodb_data",
+    "dev": "nuxt-ts",
+    "build": "nuxt-ts build",
+    "start": "nuxt-ts start",
+    "generate": "nuxt-ts generate"
+  },
+  "dependencies": {
+    "@nuxt/typescript-runtime": "^0.1.7",
+    "@nuxtjs/axios": "^5.3.6",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cookie-parser": "^1.4.2",
+    "@types/jsonwebtoken": "^8.3.4",
+    "@types/mongoose": "^5.5.19",
+    "@types/validator": "^10.11.3",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.7.3",
+    "nuxt": "^2.9.1",
+    "nuxt-property-decorator": "^2.4.0",
+    "ts-node": "^8.4.1",
+    "validator": "^11.1.0"
+  },
+  "devDependencies": {
+    "@nuxt/typescript-build": "^0.2.10",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^8.0.0"
+  }
+}
