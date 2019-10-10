@@ -23,6 +23,7 @@
 import { Component, Vue, Prop } from "nuxt-property-decorator";
 import { IPost } from "~/server/schemas/Post";
 
+
 @Component
 export default class FormsPost extends Vue{
     @Prop(Object) 

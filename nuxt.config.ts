@@ -35,12 +35,17 @@ const config: Configuration = {
   /*
    ** Global CSS
    */
-  css: [],
+  css: [
+    "quill/dist/quill.core.css",
+    "quill/dist/quill.snow.css",
+    "quill/dist/quill.bubble.css"
+  ],
   /*
    ** Plugins to load before mounting the App
    */
   plugins: [
-    "~/plugins/axios"
+    "~/plugins/axios",
+    "~/plugins/vue-quill-editor",
   ],
   typescript: {
     typeCheck: true,
@@ -54,6 +59,8 @@ const config: Configuration = {
    ** Nuxt.js modules
    */
   modules: [
+    // Doc: https://bootstrap-vue.js.org/docs/
+    'bootstrap-vue/nuxt',
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios'
   ],

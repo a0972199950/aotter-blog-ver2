@@ -1,26 +1,37 @@
 import { Request, Response } from "express";
+import fs from "fs";
+import path from "path";
+import sharp from "sharp";
 import User, { Credentials } from "../models/User";
+import Blog from "../models/Blog";
 import { IUserDocument } from "../schemas/User";
 import { IReqThroughMiddleware } from "../middleware/interfaces";
 
-type TAllowedUpdateField = "password" | "name" | "birthday" | "phone"
+type TAllowedUpdateField = "password" | "name" | "avatar" | "birthday" | "phone";
 
 class UsersController{
     // 註冊
     public async signup(req: Request, res: Response): Promise<void> {
         try {
-            const { email, password }: Credentials = req.body;
+            const { email, password, blogName } = req.body;
             const user = new User({ email, password });
+            const blog = new Blog({ name: blogName, author: user._id });
+
+            user.avatarUrl = `/api/users/avatar/${user._id}?${new Date().valueOf()}`;
+            user.blog = blog._id;
+            blog.coverUrl = `/api/blogs/cover/${blog._id}?${new Date().valueOf()}`;
+
             const token = await user.generateToken();
+            await blog.save();
 
             res
                 .cookie("ab_token", token, {
                     maxAge: 86400000,
                     signed: true
                 })
-                .json({ user });
+                .json({ user, blog });
         } catch(e){
-            res.status(400).json({ message: e.message })
+            res.status(400).json({ message: e.message });
         }
     }
 
@@ -65,7 +76,7 @@ class UsersController{
 
         const allowedUpdateFields: TAllowedUpdateField[] = ["password", "name", "birthday", "phone"];
         user = allowedUpdateFields.reduce((user: IUserDocument, fieldName: string) => {
-            const fieldValue = req.body[fieldName];
+            let fieldValue = req.body[fieldName];
             if(fieldValue){
                 user = Object.assign(user, { [fieldName]: fieldValue });
             };
@@ -81,6 +92,46 @@ class UsersController{
         };
     }
 
+    // 上傳頭像
+    public async uploadAvatar(req: IReqThroughMiddleware, res: Response): Promise<Response | void> {
+        let user: IUserDocument | undefined = req.user;
+        if(!user) return res.status(404).json({ message: "找不到User" });
+
+        const originAvatar = req.file.buffer;
+        const formattedAvatar = await sharp(originAvatar).resize(250, 250).jpeg().toBuffer();
+        user = Object.assign(user, { 
+            avatar: formattedAvatar,
+            avatarUrl: `/api/users/avatar/${user._id}?${new Date().valueOf()}`
+        });
+
+        try {
+            await user.save();
+            res.json({ user });
+        } catch(e){
+            res.status(500).json({ message: e.message });
+        }
+    }
+
+    // 讀取頭像
+    public async fetchAvatar(req: Request, res: Response): Promise<Response | void> {
+        const userId: string = req.params.userId;
+
+        try {
+            const user = await User
+                .findById(userId)
+                .select("avatar")
+                .exec();
+
+            if(!user) return res.status(404).json({ error: "找不到User" });
+
+            const avatar = user.avatar || fs.readFileSync(path.join(__dirname, "../../static/image/avatar-default.jpg"));
+            res.set("Content-Type", "image/jpeg");
+            res.send(avatar);
+        } catch(e){
+            res.status(500).json({ message: e.message });
+        }
+    }
+
     // 登出目前裝置
     public async logout(req: IReqThroughMiddleware, res: Response): Promise<Response | void> {
         const token: string = req.signedCookies.ab_token;
@@ -89,6 +140,7 @@ class UsersController{
 
         user.tokens = user.tokens.filter(eachToken=> eachToken !== token);
 
+        console.log("user", user);
         try {
             await user.save();
             res

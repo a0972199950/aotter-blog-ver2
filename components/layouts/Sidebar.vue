@@ -9,6 +9,13 @@
             </nuxt-link>
 
             <nuxt-link
+                to="/admin/blog"
+                class="list-group-item list-group-item-action"
+                :class="{ active: $route.path.match(/^\/admin\/blog/) }">
+                部落格設定
+            </nuxt-link>
+
+            <nuxt-link
                 to="/admin/posts"
                 class="list-group-item list-group-item-action"
                 :class="{ active: $route.path.match(/^\/admin\/posts/) }">

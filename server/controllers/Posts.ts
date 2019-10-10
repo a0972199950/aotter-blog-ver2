@@ -65,7 +65,7 @@ class PostsController {
 
     // 更新單一文章
     public async update(req: IReqThroughMiddleware, res: Response): Promise<Response | void> {
-        let post = req.post;
+        let post: IPostDocument | undefined = req.post;
         if(!post) return res.status(404).json({ message: "文章不存在" });
 
         const allowedUpdateFields: TAllowedUpdateField[] = ["title", "content"];

@@ -1,32 +1,41 @@
 import { Context } from "@nuxt/types"
 import { MutationTree, ActionTree, ActionContext } from "vuex";
+import { IUser } from "~/interfaces/User";
 
-export interface IUser {
-  _id: string | null,
-  email: string | null,
-  name: string | null,
-  birthday: string | null,
-  phone: string | null
-}
 
 export interface IState {
   user: IUser
 }
 
-
 export const state = (): IState => ({
   user: {
     _id: null,
     email: null,
+    avatarUrl: null,
     name: null,
     birthday: null,
-    phone: null
+    phone: null,
+    blogName: null,
+    blogIntro: null
   }
 });
 
 export const mutations: MutationTree<IState> = {
   SET_USER(state: IState, user: IUser){
     state.user = user;
+  },
+
+  CLEAR_USER(state: IState){
+    state.user = {
+      _id: null,
+      email: null,
+      avatarUrl: null,
+      name: null,
+      birthday: null,
+      phone: null,
+      blogName: null,
+      blogIntro: null
+    }
   }
 };
 
