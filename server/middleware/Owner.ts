@@ -1,5 +1,5 @@
 import { Response, NextFunction } from "express";
-import { IReqThroughMiddleware } from "./interfaces";
+import { IReqThroughMiddleware } from "../../interfaces/basic";
 import Post from "../models/Post";
 import Blog from "../models/Blog";
 import { IPostDocument } from "../schemas/Post";

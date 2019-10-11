@@ -1,5 +1,5 @@
 <template>
-    <section class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <section class="d-flex justify-content-center align-items-center">
 		<div class="card">
 			<div class="card-body">
 				<div class="form-group">
@@ -22,6 +22,12 @@
 					@click="signup">
 					確定註冊
 				</button>
+
+				<nuxt-link 
+					class="btn btn-block btn-primary"
+					to="/login">
+					返回登入
+				</nuxt-link>
 			</div>
 		</div>
 	</section>
@@ -30,7 +36,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator';
-import { IUser } from "~/interfaces/User";
+import { IUserClient, IBlogClient } from "~/interfaces/basic";
 
 interface Data {
     formData: {
@@ -40,7 +46,9 @@ interface Data {
     }
 }
 
-@Component
+@Component({
+	middleware: "auth"
+})
 export default class Signup extends Vue {
     formData: Data["formData"] = {
         email: null,
@@ -52,8 +60,10 @@ export default class Signup extends Vue {
         const signupData = this.formData;
         
 		try {
-			const { user }: { user: IUser } = await this.$axios.$post("/api/users", signupData);
+			const { user }: { user: IUserClient } = await this.$axios.$post("/api/users", signupData);
+			const { blog }: { blog: IBlogClient } = await this.$axios.$get(`/api/blogs/${user.blog}`);
 			this.$store.commit("SET_USER", user);
+			this.$store.commit("SET_BLOG", blog);
 			this.$router.push("/admin/blog");
 		} catch(e){
 			console.log(e.response.data.message);
@@ -63,10 +73,15 @@ export default class Signup extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.card {
-	background: rgba(255, 255, 255, .8);
-	.card-body {
-		width: 16rem;
+section {
+	width: 100vw;
+	height: 100vh;
+
+	.card {
+		background: rgba(255, 255, 255, .8);
+		.card-body {
+			width: 16rem;
+		}
 	}
 }
 </style>

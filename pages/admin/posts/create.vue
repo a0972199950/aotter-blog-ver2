@@ -24,6 +24,7 @@ interface Post {
 
 @Component({
     layout: "admin",
+    middleware: "auth",
     components: {
         PostForm: () => import("~/components/forms/Post.vue")
     }

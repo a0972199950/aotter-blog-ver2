@@ -1,11 +1,6 @@
 <template>
     <section>
         <div class="form-group">
-            <label for="image">封面照片</label>
-            <input type="file" id="image" class="form-control">
-        </div>
-
-        <div class="form-group">
             <label for="title">標題</label>
             <input type="text" id="title" class="form-control" v-model="post.title">
         </div>
@@ -21,12 +16,12 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "nuxt-property-decorator";
-import { IPost } from "~/server/schemas/Post";
+import { IPostClient } from "~/interfaces/basic";
 
 
 @Component
 export default class FormsPost extends Vue{
     @Prop(Object) 
-    readonly post: IPost | undefined
+    readonly post: IPostClient | undefined
 }
 </script>

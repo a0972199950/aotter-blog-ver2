@@ -30,6 +30,7 @@ interface Data{
 
 @Component({
     layout: "admin",
+    middleware: "auth",
     components: {
         PostForm: () => import("~/components/forms/Post.vue")
     }
@@ -65,7 +66,7 @@ export default class AdminPosts_postId extends Vue {
             this.$router.push("/admin/posts");
         } catch(e){
             console.log(e);
-            alert("儲存失敗，請查看console");
+            this.$swal("儲存失敗", "請查看console", "error");
         }
     }
 

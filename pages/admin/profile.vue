@@ -35,7 +35,7 @@ import { Component, Vue } from 'nuxt-property-decorator';
 import { Context } from "@nuxt/types";
 import { Store } from "vuex";
 import { IState } from "~/store/index";
-import { IUser } from "~/interfaces/User";
+import { IUserClient } from "~/interfaces/basic";
 
 interface FormData {
     name: string | null,
@@ -60,15 +60,17 @@ export default class AdminProfile extends Vue {
         phone: null
     }
 
-    asyncData(context: Context): Data{
+    asyncData(context: Context): Data | void{
         const store: Store<IState> = context.store;
         const user = store.state.user;
-        return {
-            avatarUrl: user.avatarUrl,
-            formData: {
-                name: user.name,
-                birthday: user.birthday,
-                phone: user.phone
+        if(user){
+            return {
+                avatarUrl: user.avatarUrl,
+                formData: {
+                    name: user.name,
+                    birthday: user.birthday,
+                    phone: user.phone
+                }
             }
         }
     }
@@ -88,12 +90,14 @@ export default class AdminProfile extends Vue {
         formData.append("avatar", avatar);
         try {
             const { user } = await this.$axios.$post("/api/users/avatar", formData);
+            this.$store.commit("SET_USER", user);
 
             if(img instanceof HTMLImageElement){
                 img.src = user.avatarUrl;
+                this.$swal("更新成功", "", "success");
             }
         } catch(e){
-            alert("更新失敗");
+            this.$swal("更新失敗", "", "error");
         }
         
     }
@@ -102,9 +106,9 @@ export default class AdminProfile extends Vue {
         const updates = this.formData;
 
         try {
-            const { user }: { user: IUser } = await this.$axios.$patch(`/api/users/profile`, updates);
+            const { user }: { user: IUserClient } = await this.$axios.$patch(`/api/users/profile`, updates);
             this.$store.commit("SET_USER", user);
-            alert("更新完成");
+            this.$swal("更新成功", "", "success");
         } catch(e){
             console.log(e.response);
         }

@@ -45,6 +45,7 @@ const config: Configuration = {
    */
   plugins: [
     "~/plugins/axios",
+    "~/plugins/sweetAlert",
     "~/plugins/vue-quill-editor",
   ],
   typescript: {

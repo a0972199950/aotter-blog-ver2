@@ -5,20 +5,19 @@ import {
     SchemaOptions,
     SchemaTypeOpts
 } from "mongoose";
-
-export interface IPost {
-    title: string
-    content: string
-    author: string
-}
+import { IPost } from "../../interfaces/basic";
 
 export interface IPostDocument extends Document{
-    [key: string]: any
-
     // 定義欄位類型
+    _id: IPost["_id"]
+    createdAt: IPost["createdAt"]
+    updatedAt: IPost["updatedAt"]
     title: IPost["title"]
     content: IPost["content"]
     author: IPost["author"]
+    belongToBlog: IPost["belongToBlog"]
+
+    // 定義實例方法接口
 }
 
 const createSchemaDefinition = (): SchemaDefinition => {
@@ -33,10 +32,17 @@ const createSchemaDefinition = (): SchemaDefinition => {
 
     const author: SchemaTypeOpts<any> = {
         type: String,
-        required: true
+        required: true,
+        ref: "User"
+    };
+
+    const belongToBlog: SchemaTypeOpts<any> = {
+        type: String,
+        required: true,
+        ref: "Blog"
     }
 
-    return { title, content, author };
+    return { title, content, author, belongToBlog };
 };
 
 const createSchemaOptions = (): SchemaOptions => ({

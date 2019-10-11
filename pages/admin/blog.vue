@@ -5,7 +5,7 @@
         <div class="blogCover">
             <img :src="blogCoverUrl" ref="blogCover">
             <div class="middle">
-                <button @click="changeAvatar" class="btn btn-primary rounded-0">變更頭像</button>
+                <button @click="changeBlogCover" class="btn btn-primary rounded-0">變更封面</button>
                 <input type="file" ref="fileSelector" @change="fileSelected" style="display: none">
             </div>
         </div>
@@ -24,14 +24,16 @@
     </section>
 </template>
 
+
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator';
 import { Context } from "@nuxt/types";
 import { Store } from "vuex";
 import { IState } from "~/store/index";
-import { IUser } from "~/interfaces/User";
+import { IUserClient, IBlogClient } from "~/interfaces/basic";
 
 interface Data {
+    blogCoverUrl: string | null
     formData: {
         blogName: string | null,
         blogIntro: string | null
@@ -43,20 +45,29 @@ interface Data {
     layout: "admin"
 })
 export default class AdminBlog extends Vue {
+    blogCoverUrl: Data["blogCoverUrl"] = null
     formData: Data["formData"] = {
         blogName: null,
         blogIntro: null
     }
 
-    asyncData(context: Context): Data{
+    asyncData(context: Context): Data | void{
         const store: Store<IState> = context.store;
-        const { blogName, blogIntro } = store.state.user;
-        return {
-            formData: { blogName, blogIntro }
+        const blog = store.state.blog;
+
+        if(blog){
+            const { coverUrl, name, intro } = blog;
+            return {
+                blogCoverUrl: coverUrl,
+                formData: { 
+                    blogName: name, 
+                    blogIntro: intro
+                }
+            }
         }
     }
 
-    changeAvatar(){
+    changeBlogCover(){
         const fileSelector = this.$refs.fileSelector;
         if(fileSelector instanceof HTMLElement){
             fileSelector.click();
@@ -68,15 +79,18 @@ export default class AdminBlog extends Vue {
         const formData = new FormData();
         const img = this.$refs.blogCover;
 
-        formData.append("blogCover", blogCover);
+        formData.append("cover", blogCover);
         try {
-            await this.$axios.$post("/api/users/blogCover", formData);
+            const { blog } = await this.$axios.$post("/api/blogs/cover", formData);
+            this.$store.commit("SET_BLOG", blog);
 
             if(img instanceof HTMLImageElement){
-                img.src += `?${new Date().valueOf()}`;
+                img.src = blog.coverUrl;
+                this.$swal("更新成功", "", "success");
             }
         } catch(e){
-            alert("更新失敗");
+            console.log(e.response);
+            this.$swal("更新失敗", "", "error");
         }
         
     }
@@ -85,11 +99,12 @@ export default class AdminBlog extends Vue {
         const updates = this.formData;
 
         try {
-            const { user }: { user: IUser } = await this.$axios.$patch(`/api/users/profile`, updates);
-            this.$store.commit("SET_USER", user);
-            alert("更新完成");
+            const { blog }: { blog: IBlogClient } = await this.$axios.$patch(`/api/blogs`, updates);
+            this.$store.commit("SET_BLOG", blog);
+            this.$swal("更新成功", "", "success");
         } catch(e){
             console.log(e.response);
+            this.$swal("更新失敗", "", "error");
         }
     }
 }
@@ -99,7 +114,7 @@ export default class AdminBlog extends Vue {
 <style lang="scss" scoped>
 .blogCover {
     width: 100%;
-    height: 400px;
+    height: 300px;
     position: relative;
     img {
         width: 100%;

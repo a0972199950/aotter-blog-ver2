@@ -1,42 +1,34 @@
 import { Context } from "@nuxt/types"
 import { MutationTree, ActionTree, ActionContext } from "vuex";
-import { IUser } from "~/interfaces/User";
+import { IUserClient, IBlogClient } from "~/interfaces/basic";
 
 
 export interface IState {
-  user: IUser
+  user: IUserClient | null
+  blog: IBlogClient | null
 }
 
 export const state = (): IState => ({
-  user: {
-    _id: null,
-    email: null,
-    avatarUrl: null,
-    name: null,
-    birthday: null,
-    phone: null,
-    blogName: null,
-    blogIntro: null
-  }
+  user: null,
+  blog: null
 });
 
 export const mutations: MutationTree<IState> = {
-  SET_USER(state: IState, user: IUser){
+  SET_USER(state: IState, user: IUserClient){
     state.user = user;
   },
 
   CLEAR_USER(state: IState){
-    state.user = {
-      _id: null,
-      email: null,
-      avatarUrl: null,
-      name: null,
-      birthday: null,
-      phone: null,
-      blogName: null,
-      blogIntro: null
-    }
-  }
+    state.user = null;
+  },
+
+  SET_BLOG(state: IState, blog: IBlogClient){
+    state.blog = blog
+  },
+
+  CLEAR_BLOG(state: IState){
+    state.blog = null;
+  },
 };
 
 export const actions: ActionTree<IState, IState> = {
@@ -44,8 +36,10 @@ export const actions: ActionTree<IState, IState> = {
     const { app } = context;
     
     try {
-      const { user } = await app.$axios.$get("/api/users/profile");
+      const { user }: { user: IUserClient } = await app.$axios.$get("/api/users/profile");
+      const { blog }: { blog: IBlogClient } = await app.$axios.$get(`/api/blogs/${user.blog}`);
       vuexContext.commit("SET_USER", user);
+      vuexContext.commit("SET_BLOG", blog);
     } catch(e){
       console.log(e.response.data.message);
     }

@@ -1,9 +1,9 @@
 <template>
     <section>
-        <div class="jumbotron jumbotron-fluid">
+        <div class="jumbotron jumbotron-fluid" :style="{'background-image': `url(${blog.coverUrl})`}">
             <div class="container">
-                <h1 class="display-4">{{ author.blogName }}</h1>
-                <p class="lead">{{ author.blogIntro }}</p>
+                <h1 class="display-4">{{ blog.name }}</h1>
+                <p class="lead">{{ blog.intro }}</p>
             </div>
         </div>
 
@@ -27,32 +27,26 @@
 <script lang="ts">
 import { Component, Vue } from "nuxt-property-decorator";
 import { Context } from "@nuxt/types";
-import { IPosts } from "~/interfaces/Post";
-import { IAuthor } from "~/interfaces/User"
+import { IPostClient, IBlogClient } from "~/interfaces/basic";
 
 interface Data {
-    posts: IPosts | never[],
-    author: IAuthor
+    blog: IBlogClient | null
+    posts: IPostClient[] | []
 }
 
 @Component
-export default class Blogs_userId extends Vue {
+export default class Blogs_blogId extends Vue {
+    blog: Data["blog"] = null
     posts: Data["posts"] = []
-    author: Data["author"] = {
-        _id: null,
-        blogName: null,
-        blogIntro: null,
-        avatarUrl: null
-    }
 
     async asyncData(context: Context): Promise<Data | void>{
         const { app, params } = context;
-        const userId = params.userId;
+        const blogId: string = params.blogId;
 
         try {
-            const { author }: { author: IAuthor } = await app.$axios.$get(`/api/users/${userId}`);
-            const { posts }: { posts: IPosts } = await app.$axios.$get(`/api/posts/all/${userId}`);
-            return { posts, author };
+            const { blog }: { blog: IBlogClient } = await app.$axios.$get(`/api/blogs/${blogId}`);
+            const { posts }: { posts: IPostClient[] } = await app.$axios.$get(`/api/posts/blog/${blogId}`);
+            return { blog, posts };
         } catch(e){
             console.log(e.response);
         }
@@ -62,8 +56,8 @@ export default class Blogs_userId extends Vue {
 
 <style lang="scss" scoped>
 .jumbotron {
-    background-image: url("https://picsum.photos/1200/500");
-    background-size: contain;
+    height: 350px;
+    background-size: cover;
     color: white;
 }
 </style>

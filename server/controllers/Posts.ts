@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import Post from "../models/Post";
-import User from "../models/User"
-import { IReqThroughMiddleware } from "../middleware/interfaces";
+import Blog from "../models/Blog";
+import { IReqThroughMiddleware } from "../../interfaces/basic";
 import { IPostDocument } from "../schemas/Post";
+
 
 interface IPost {
     title: string
@@ -15,13 +16,16 @@ class PostsController {
     // 新增文章
     public async create(req: IReqThroughMiddleware, res: Response): Promise<Response | void> {
         const { title, content }: IPost = req.body;
+        const user = req.user;
+        if(!user) return res.status(403).json({ message: "請先登入" });
 
-        if(!req.user) return res.status(403).json({ message: "請先登入" });
-        const userId: string = req.user.id;
+        const userId = user._id;
+        const blogId = user.blog;
 
         const post: IPostDocument = new Post({
             title, content,
-            author: userId
+            author: userId,
+            belongToBlog: blogId
         });
 
         try {
@@ -47,17 +51,33 @@ class PostsController {
     }
 
     // 獲取單一用戶全部文章
-    public async fetchAll(req: Request, res: Response): Promise<Response | void> {
-        const userId: string = req.params.userId;
+    public async fetchAll(req: IReqThroughMiddleware, res: Response): Promise<Response | void> {
+        const user = req.user;
+        if(!user) return res.status(404).json({ message: "找不到User" });
 
         try {
-            const user = await User
-                .findById(userId)
+            await user
+                .populate({ path: "posts" })
+                .execPopulate();
+
+            res.json({ posts: user.posts });
+        } catch(e){
+            res.status(500).json({ message: e.message });
+        }
+    }
+
+    // 獲取單一部落格全部文章
+    public async fetchAllByBlog(req: Request, res: Response): Promise<Response | void> {
+        const blogId: string = req.params.blogId;
+
+        try {
+            const blog = await Blog
+                .findById(blogId)
                 .populate({ path: "posts" })
                 .exec();
 
-            if(!user) return res.status(404).json({ message: "User不存在" });
-            res.json({ posts: user.posts });
+            if(!blog) return res.status(404).json({ message: "部落格不存在" });
+            res.json({ posts: blog.posts });
         } catch(e){
             res.status(500).json({ message: e.message });
         }

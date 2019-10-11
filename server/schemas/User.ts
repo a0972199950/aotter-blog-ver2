@@ -9,31 +9,8 @@ import {
 import validator from "validator";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import { IBlog } from "./Blog";
-import { IPost } from "./Post";
+import { IUser, IAuthor } from "../../interfaces/basic";
 
-export interface IUser {
-    _id: string
-    createdAt: Date
-    updatedAt: Date
-    email: string
-    password: string
-    name: string
-    avatar: Buffer
-    avatarUrl: string
-    birthday: string
-    phone: string
-    tokens: string[]
-    blog: string | IBlog
-    posts: IPost[]
-}
-
-export interface IAuthor {
-    _id: IUser["_id"]
-    avatarUrl: IUser["avatarUrl"]
-    blogName: IBlog["name"]
-    blogIntro: IBlog["intro"]
-}
 
 export interface IUserDocument extends Document{
     [key: string]: any
@@ -138,7 +115,7 @@ UserSchema.methods.mapUserToAuthor = function(): IAuthor {
     const user = this;
 
     return { 
-        _id: user._id,
+        _id: user.blog._id,
         avatarUrl: user.avatarUrl,
         blogName: user.blog.name, 
         blogIntro: user.blog.intro

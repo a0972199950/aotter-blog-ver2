@@ -10,13 +10,21 @@ interface IContextDestructured {
 
 const auth: Middleware = (context: Context): void => {
     const { store, redirect, route }: IContextDestructured = context;
-    
-    if(!store.state.user._id){
-        return redirect("/");
-    }
+    const path = route.path;
+    const isLogined = !!store.state.user;
 
-    if(route.path === "/"){
-        return redirect("/admin/profile");
+    switch(path){
+        case "/login":
+            if(isLogined) return redirect("/blogs");
+            break;
+
+        case "/signup":
+            if(isLogined) return redirect("/blogs");
+            break;
+
+        default: 
+            if(!isLogined) return redirect("/login");
+            break;
     }
 }
 

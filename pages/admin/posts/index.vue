@@ -37,22 +37,23 @@ interface Data {
 }
 
 @Component({
-    layout: "admin"
+    layout: "admin",
+    middleware: "auth",
 })
 export default class AdminPosts extends Vue {
     posts: Data["posts"] = []
 
     async asyncData(context: Context): Promise<Data | void>{
         const { app, store }: { app: NuxtAppOptions, store: Store<IState> } = context;
-        const userId = store.state.user._id;
 
         try {
-            const { posts }: { posts: Data["posts"] } = await app.$axios.$get(`/api/posts/all/${userId}`);
+            const { posts }: { posts: Data["posts"] } = await app.$axios.$get("/api/posts");
             return { posts }
         } catch(e){
             console.log(e.response);
             return { posts: [] };
         }
+        
     }
 
     async remove(postId: string): Promise<void>{
@@ -62,7 +63,7 @@ export default class AdminPosts extends Vue {
                 this.$router.go(0);
             } catch(e){
                 console.log(e);
-                alert("刪除失敗");
+                this.$swal("刪除失敗", "請查看console", "error");
             }
         }
     }

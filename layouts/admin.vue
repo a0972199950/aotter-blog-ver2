@@ -8,6 +8,7 @@
                 <nuxt class="col-md-9" />
             </div>
         </div>
+        
     </section>
 </template>
 

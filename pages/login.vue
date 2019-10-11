@@ -1,5 +1,5 @@
 <template>
-	<section class="w-100 h-100 d-flex justify-content-center align-items-center">
+	<section class="d-flex justify-content-center align-items-center">
 		<div class="card">
 			<div class="card-body">
 				<div class="form-group">
@@ -28,9 +28,10 @@
 	</section>
 </template>
 
+
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator';
-import { IUser } from "~/server/schemas/User";
+import { IUserClient, IBlogClient } from "~/interfaces/basic";
 
 interface Data {
 	formData: {
@@ -52,9 +53,11 @@ export default class Index extends Vue {
 		const loginData = this.formData;
 
 		try {
-			const { user }: { user: IUser } = await this.$axios.$post("/api/users/login", loginData);
+			const { user }: { user: IUserClient } = await this.$axios.$post("/api/users/login", loginData);
+			const { blog }: { blog: IBlogClient } = await this.$axios.$get(`/api/blogs/${user.blog}`);
 			this.$store.commit("SET_USER", user);
-			this.$router.push("/admin/blog");
+			this.$store.commit("SET_BLOG", blog);
+			this.$router.push("/blogs");
 		} catch(e){
 			console.log(e.response.data.message);
 		};
@@ -63,10 +66,15 @@ export default class Index extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.card {
-	background: rgba(255, 255, 255, .8);
-	.card-body {
-		width: 16rem;
+section {
+	width: 100vw;
+	height: 100vh;
+
+	.card {
+		background: rgba(255, 255, 255, .8);
+		.card-body {
+			width: 16rem;
+		}
 	}
 }
 </style>

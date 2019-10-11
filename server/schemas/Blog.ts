@@ -5,18 +5,8 @@ import {
     SchemaOptions, 
     SchemaTypeOpts
 } from "mongoose";
+import { IBlog } from "../../interfaces/basic";
 
-
-export interface IBlog {
-    _id: string
-    createdAt: Date
-    updatedAt: Date
-    cover: Buffer
-    coverUrl: string
-    name: string
-    intro: string
-    author: string
-}
 
 export interface IBlogDocument extends Document {
     // 定義欄位類型
@@ -28,6 +18,7 @@ export interface IBlogDocument extends Document {
     name: IBlog["name"]
     intro: IBlog["intro"]
     author: IBlog["author"]
+    posts: IBlog["posts"]
 
     // 定義實例方法接口
 }
@@ -52,7 +43,9 @@ const createSchemaDefinition = (): SchemaDefinition => {
     };
 
     const author: SchemaTypeOpts<any> = {
-        type: String
+        type: String,
+        required: true,
+        ref: "User"
     };
 
     return { cover, coverUrl, name, intro, author };
@@ -64,5 +57,10 @@ const createSchemaOptions = (): SchemaOptions => ({
 
 const BlogSchema: Schema = new Schema(createSchemaDefinition(), createSchemaOptions());
 
+BlogSchema.virtual("posts", {
+    ref: "Post",
+    localField: "_id",
+    foreignField: "belongToBlog"
+});
 
 export default BlogSchema

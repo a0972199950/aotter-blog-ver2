@@ -5,7 +5,7 @@ import sharp from "sharp";
 import User, { Credentials } from "../models/User";
 import Blog from "../models/Blog";
 import { IUserDocument } from "../schemas/User";
-import { IReqThroughMiddleware } from "../middleware/interfaces";
+import { IReqThroughMiddleware } from "../../interfaces/basic";
 
 type TAllowedUpdateField = "password" | "name" | "avatar" | "birthday" | "phone";
 
@@ -140,7 +140,6 @@ class UsersController{
 
         user.tokens = user.tokens.filter(eachToken=> eachToken !== token);
 
-        console.log("user", user);
         try {
             await user.save();
             res
