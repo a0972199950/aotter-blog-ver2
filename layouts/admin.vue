@@ -1,6 +1,6 @@
 <template>
-    <section>
-        <Header class="mb-3" />
+    <section id="layout">
+        <Header />
 
         <div class="container">
             <div class="row">
@@ -23,4 +23,10 @@ import { Component, Vue } from "nuxt-property-decorator";
 })
 export default class AdminLayout extends Vue{}
 </script>
+
+<style lang="scss" scoped>
+#layout {
+    padding-top: 56px;
+}
+</style>
     

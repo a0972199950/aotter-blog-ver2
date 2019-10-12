@@ -5,10 +5,9 @@
             <input type="text" id="title" class="form-control" v-model="post.title">
         </div>
 
-        <div class="form-group">
-            <label for="content">內文</label>
-            <textarea id="content" rows="10" class="form-control" v-model="post.content"></textarea>
-        </div>
+        <Editor 
+            :delta="post.content"
+            @change="onEditorChange" />
 
         <slot name="actions"></slot>
     </section>
@@ -19,9 +18,17 @@ import { Component, Vue, Prop } from "nuxt-property-decorator";
 import { IPostClient } from "~/interfaces/basic";
 
 
-@Component
+@Component({
+    components: {
+        Editor: () => import("~/components/UIWidgets/Editor.vue")
+    }
+})
 export default class FormsPost extends Vue{
     @Prop(Object) 
     readonly post: IPostClient | undefined
+
+    onEditorChange(deltaOps: IPostClient["content"]){
+        this.$emit("change", deltaOps);
+    }
 }
 </script>

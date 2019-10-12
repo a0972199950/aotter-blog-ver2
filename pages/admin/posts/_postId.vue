@@ -1,6 +1,6 @@
 <template>
     <section>
-        <PostForm :post="post">
+        <PostForm :post="post" @change="onEditorChange">
             <div class="row" slot="actions">
                 <div class="col-md-6">
                     <button class="btn btn-primary btn-block" @click="save">儲存</button>
@@ -17,11 +17,12 @@
 <script lang="ts">
 import { Component, Vue } from "nuxt-property-decorator";
 import { Context } from "@nuxt/types";
+import { IPostClient } from "~/interfaces/basic";
 
 interface Post{
-    _id: string | null,
-    title: string | null,
-    content: string | null
+    _id: IPostClient["_id"] | null,
+    title: IPostClient["title"] | null,
+    content: IPostClient["content"] | null
 }
 
 interface Data{
@@ -52,6 +53,10 @@ export default class AdminPosts_postId extends Vue {
         } catch(e){
             console.log(e);
         }
+    }
+
+    onEditorChange(deltaOps: IPostClient["content"]){
+        this.post.content = deltaOps;
     }
 
     async save(): Promise<void>{

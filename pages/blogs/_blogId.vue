@@ -56,7 +56,7 @@ export default class Blogs_blogId extends Vue {
 
 <style lang="scss" scoped>
 .jumbotron {
-    height: 350px;
+    height: 400px;
     background-size: cover;
     color: white;
 }

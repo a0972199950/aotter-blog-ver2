@@ -1,6 +1,6 @@
 <template>
     <section>
-        <PostForm :post="post">
+        <PostForm :post="post" @change="onEditorChange">
             <div class="row" slot="actions">
                 <div class="col-md-6">
                     <button class="btn btn-primary btn-block" @click="save">新增文章</button>
@@ -16,10 +16,11 @@
 
 <script lang="ts">
 import { Component, Vue } from "nuxt-property-decorator";
+import { IPostClient } from "~/interfaces/basic";
 
-interface Post {
-    title: string | null,
-    content: string | null
+interface Data {
+    title: IPostClient["title"] | null
+    content: IPostClient["content"] | null
 }
 
 @Component({
@@ -30,13 +31,17 @@ interface Post {
     }
 })
 export default class AdminPostsCreate extends Vue {
-    post: Post = {
+    post: Data = {
         title: null,
         content: null
     }
 
+    onEditorChange(deltaOps: IPostClient["content"]){
+        this.post.content = deltaOps;
+    }
+
     async save(): Promise<void>{
-        const post: Post = this.post;
+        const post: Data = this.post;
 
         try {
             await this.$axios.$post("/api/posts", post);

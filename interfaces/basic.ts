@@ -1,4 +1,5 @@
 import { Request } from "express";
+import { DeltaOperation } from "quill";
 import { IUserDocument } from "~/server/schemas/User";
 import { IBlogDocument } from "~/server/schemas/Blog";
 import { IPostDocument } from "~/server/schemas/Post";
@@ -11,7 +12,7 @@ export interface IReqThroughMiddleware extends Request{
 }
 
 export interface IDocument {
-    _id: string
+    _id: any
     createdAt: Date
     updatedAt: Date
 }
@@ -40,7 +41,7 @@ export interface IBlog extends IDocument{
 
 export interface IPost extends IDocument {
     title: string
-    content: string
+    content: DeltaOperation[]
     author: string | IUser
     belongToBlog: string | IBlog
 }

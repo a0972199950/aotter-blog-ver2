@@ -1,5 +1,5 @@
 <template>
-    <section class="container pt-5 mt-5">
+    <section class="container">
         <div class="row">
             <div v-for="(author, index) in authors" :key="index" class="col-md-4">
                 <nuxt-link :to="`/blogs/${author._id}`">

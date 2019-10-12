@@ -7,16 +7,7 @@ import {
 } from "mongoose";
 import { IPost } from "../../interfaces/basic";
 
-export interface IPostDocument extends Document{
-    // 定義欄位類型
-    _id: IPost["_id"]
-    createdAt: IPost["createdAt"]
-    updatedAt: IPost["updatedAt"]
-    title: IPost["title"]
-    content: IPost["content"]
-    author: IPost["author"]
-    belongToBlog: IPost["belongToBlog"]
-
+export interface IPostDocument extends IPost, Document{
     // 定義實例方法接口
 }
 
@@ -27,7 +18,7 @@ const createSchemaDefinition = (): SchemaDefinition => {
     };
 
     const content: SchemaTypeOpts<any> = {
-        type: String
+        type: Array
     };
 
     const author: SchemaTypeOpts<any> = {

@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section id="layout">
         <div id="bg"></div>
         <Header />
         <nuxt />
@@ -8,6 +8,11 @@
 
 <script lang="ts">
 import { Component, Vue } from "nuxt-property-decorator";
+
+
+declare namespace particlesJS {
+    var load: (id: string, jsonSorece: string) => void
+}
 
 @Component({
     components: {
@@ -23,7 +28,11 @@ export default class AdminLayout extends Vue{
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+#layout {
+    padding-top: 56px;
+}
+
 #bg {
     position: fixed;
     z-index: -1;

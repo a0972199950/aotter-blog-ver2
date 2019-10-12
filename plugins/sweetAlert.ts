@@ -1,10 +1,10 @@
-// import Vue from "vue";
-// import swal from "sweetalert";
+import Vue from "vue";
+import swal from "sweetalert";
 
-// declare module "vue/types/vue" {
-//     interface Vue {
-//         $swal: any
-//     }
-// }
+declare module "vue/types/vue" {
+    interface Vue {
+        $swal: typeof swal
+    }
+}
 
-// Vue.prototype.$swal = swal;
+Vue.prototype.$swal = swal;

@@ -37,6 +37,7 @@ import { Store } from "vuex";
 import { IState } from "~/store/index";
 import { IUserClient } from "~/interfaces/basic";
 
+
 interface FormData {
     name: string | null,
     birthday: string | null,
