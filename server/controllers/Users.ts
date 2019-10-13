@@ -7,7 +7,7 @@ import Blog from "../models/Blog";
 import { IUserDocument } from "../schemas/User";
 import { IReqThroughMiddleware } from "../../interfaces/basic";
 
-type TAllowedUpdateField = "password" | "name" | "avatar" | "birthday" | "phone";
+type TAllowedUpdateField = "password" | "name" | "birthday" | "phone" | "socialMedias";
 
 class UsersController{
     // 註冊
@@ -74,7 +74,7 @@ class UsersController{
         let user: IUserDocument | undefined = req.user;
         if(!user) return res.status(404).json({ message: "找不到User" });
 
-        const allowedUpdateFields: TAllowedUpdateField[] = ["password", "name", "birthday", "phone"];
+        const allowedUpdateFields: TAllowedUpdateField[] = ["password", "name", "birthday", "phone", "socialMedias"];
         user = allowedUpdateFields.reduce((user: IUserDocument, fieldName: string) => {
             let fieldValue = req.body[fieldName];
             if(fieldValue){

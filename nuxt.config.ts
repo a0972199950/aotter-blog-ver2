@@ -36,6 +36,7 @@ const config: Configuration = {
    ** Global CSS
    */
   css: [
+    "~/assets/scss/base.scss",
     "quill/dist/quill.core.css",
     "quill/dist/quill.snow.css",
     "quill/dist/quill.bubble.css"
@@ -44,6 +45,8 @@ const config: Configuration = {
    ** Plugins to load before mounting the App
    */
   plugins: [
+    "~/plugins/filters",
+    "~/plugins/font-awesome",
     "~/plugins/axios",
     "~/plugins/sweetAlert",
     { src: "~/plugins/vue-quill-editor", mode: "client" },

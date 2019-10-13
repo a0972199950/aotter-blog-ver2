@@ -23,7 +23,7 @@ export default class AdminLayout extends Vue{
     async mounted(){
         // https://github.com/VincentGarreau/particles.js/
         await import("particles.js");
-        particlesJS.load('bg', 'api/config');
+        particlesJS.load('bg', '/api/config');
     }
 }
 </script>

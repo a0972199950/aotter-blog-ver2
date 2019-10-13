@@ -1,11 +1,14 @@
 <template>
     <section class="container">
-        <h3>部落格設定</h3>
+        <h1 class="page-title">部落格設定</h1>
 
-        <div class="blogCover">
+        <label>封面圖片</label>
+        <div class="blogCover mb-3">
             <img :src="blogCoverUrl" ref="blogCover">
             <div class="middle">
-                <button @click="changeBlogCover" class="btn btn-primary rounded-0">變更封面</button>
+                <button @click="changeBlogCover" class="btn btn-secondary rounded-circle">
+                    <font-awesome-icon :icon="['fas', 'camera']" />
+                </button>
                 <input type="file" ref="fileSelector" @change="fileSelected" style="display: none">
             </div>
         </div>
@@ -17,7 +20,7 @@
 
         <div class="form-group">
             <label for="blogIntro">部落格簡介</label>
-            <input type="text" id="blogIntro" v-model="formData.blogIntro" class="form-control">
+            <textarea v-model="formData.blogIntro" class="form-control" id="blogIntro" cols="30" rows="4"></textarea>
         </div>
 
         <button class="btn btn-primary btn-block" @click="save">儲存</button>

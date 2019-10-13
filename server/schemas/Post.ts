@@ -21,6 +21,15 @@ const createSchemaDefinition = (): SchemaDefinition => {
         type: Array
     };
 
+    const text: SchemaTypeOpts<any> = {
+        type: String
+    };
+
+    const views: SchemaTypeOpts<any> = {
+        type: Number,
+        default: 0
+    }
+
     const author: SchemaTypeOpts<any> = {
         type: String,
         required: true,
@@ -33,7 +42,7 @@ const createSchemaDefinition = (): SchemaDefinition => {
         ref: "Blog"
     }
 
-    return { title, content, author, belongToBlog };
+    return { title, content, text, views, author, belongToBlog };
 };
 
 const createSchemaOptions = (): SchemaOptions => ({

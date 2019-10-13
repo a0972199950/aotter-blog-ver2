@@ -1,7 +1,7 @@
 <template>
     <section>
         <PostForm :post="post" @change="onEditorChange">
-            <div class="row" slot="actions">
+            <div class="row mt-3" slot="actions">
                 <div class="col-md-6">
                     <button class="btn btn-primary btn-block" @click="save">儲存</button>
                 </div>
@@ -19,14 +19,13 @@ import { Component, Vue } from "nuxt-property-decorator";
 import { Context } from "@nuxt/types";
 import { IPostClient } from "~/interfaces/basic";
 
-interface Post{
-    _id: IPostClient["_id"] | null,
-    title: IPostClient["title"] | null,
-    content: IPostClient["content"] | null
+interface IEditorPayload {
+    content: IPostClient["content"]
+    text: IPostClient["text"]
 }
 
-interface Data{
-    post: Post
+interface Data {
+    post: IPostClient | null
 }
 
 @Component({
@@ -37,33 +36,34 @@ interface Data{
     }
 })
 export default class AdminPosts_postId extends Vue {
-    post: Post = {
-        _id: null,
-        title: null,
-        content: null
-    }
+    post: Data["post"] = null
 
     async asyncData(context: Context): Promise<Data | void>{
         const { app, params } = context;
         const postId = params.postId;
 
         try {
-            const { post } = await app.$axios.$get(`/api/posts/${postId}`);
+            const { post }: { post: IPostClient } = await app.$axios.$get(`/api/posts/${postId}`);
+            console.log(post);
             return { post }
         } catch(e){
             console.log(e);
         }
     }
 
-    onEditorChange(deltaOps: IPostClient["content"]){
-        this.post.content = deltaOps;
+    onEditorChange(editorPayload: IEditorPayload){
+        this.post = Object.assign(this.post, editorPayload);
     }
 
     async save(): Promise<void>{
-        const postId = this.post._id;
+        const post = this.post;
+        if(!post) return;
+
+        const postId = post._id;
         const updates = {
-            title: this.post.title,
-            content: this.post.content
+            title: post.title,
+            content: post.content,
+            text: post.text
         }
 
         try {

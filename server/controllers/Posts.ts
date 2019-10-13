@@ -1,21 +1,16 @@
 import { Request, Response } from "express";
 import Post from "../models/Post";
 import Blog from "../models/Blog";
-import { IReqThroughMiddleware } from "../../interfaces/basic";
+import { IReqThroughMiddleware, IPost } from "../../interfaces/basic";
 import { IPostDocument } from "../schemas/Post";
 
 
-interface IPost {
-    title: string
-    content?: string
-}
-
-type TAllowedUpdateField = "title" | "content"
+type TAllowedUpdateField = "title" | "content" | "text"
 
 class PostsController {
     // 新增文章
     public async create(req: IReqThroughMiddleware, res: Response): Promise<Response | void> {
-        const { title, content }: IPost = req.body;
+        const { title, content, text }: IPost = req.body;
         const user = req.user;
         if(!user) return res.status(403).json({ message: "請先登入" });
 
@@ -23,7 +18,7 @@ class PostsController {
         const blogId = user.blog;
 
         const post: IPostDocument = new Post({
-            title, content,
+            title, content, text,
             author: userId,
             belongToBlog: blogId
         });
@@ -44,6 +39,9 @@ class PostsController {
             const post = await Post.findById(postId);
             if(!post) return res.status(404).json({ message: "文章不存在" });
 
+            post.views++;
+            await post.save();
+
             res.json({ post });
         } catch(e){
             res.status(500).json({ message: e.message });
@@ -57,7 +55,12 @@ class PostsController {
 
         try {
             await user
-                .populate({ path: "posts" })
+                .populate({ 
+                    path: "posts",
+                    options: {
+                        sort: { updatedAt: -1 }
+                    }
+                })
                 .execPopulate();
 
             res.json({ posts: user.posts });
@@ -73,7 +76,12 @@ class PostsController {
         try {
             const blog = await Blog
                 .findById(blogId)
-                .populate({ path: "posts" })
+                .populate({ 
+                    path: "posts",
+                    options: {
+                        sort: { updatedAt: -1 }
+                    }
+                })
                 .exec();
 
             if(!blog) return res.status(404).json({ message: "部落格不存在" });
@@ -88,7 +96,7 @@ class PostsController {
         let post: IPostDocument | undefined = req.post;
         if(!post) return res.status(404).json({ message: "文章不存在" });
 
-        const allowedUpdateFields: TAllowedUpdateField[] = ["title", "content"];
+        const allowedUpdateFields: TAllowedUpdateField[] = ["title", "content", "text"];
         post = allowedUpdateFields.reduce((post: IPostDocument, fieldName: string) => {
             const fieldValue = req.body[fieldName]
             if(fieldValue){

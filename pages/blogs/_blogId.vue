@@ -1,25 +1,45 @@
 <template>
     <section>
-        <div class="jumbotron jumbotron-fluid" :style="{'background-image': `url(${blog.coverUrl})`}">
+        <div 
+            class="jumbotron jumbotron-fluid" 
+            :style="{'background-image': `linear-gradient( rgba(30, 30, 30, 0.7), rgba(30, 30, 30, 0.7) ), url(${blog.coverUrl})`}">
             <div class="container">
-                <h1 class="display-4">{{ blog.name }}</h1>
-                <p class="lead">{{ blog.intro }}</p>
+                <h1 class="display-4 font-weight-bold">{{ blog.name }}</h1>
+                <p class="lead blog-intro font-weight-bold">{{ blog.intro }}</p>
             </div>
         </div>
 
-        <div class="container">
-            <div 
-                v-for="(post, index) in posts"
-                :key="index"
-                class="media border rounded mb-2">
+        <div class="row px-5">
+            <div class="col-md-3">
+                <AuthorCard :author="author" />
+            </div>
 
-                <img src="https://picsum.photos/100/100" class="mr-3" alt="...">
-                <div class="media-body">
-                    <h5 class="mt-0">{{ post.title }}</h5>
-                    {{ post.content }}
+            <div class="col-md-9 border-left">
+                <div class="container">
+                    <div class="row">
+                        <div 
+                            v-for="(post, index) in posts"
+                            :key="index"
+                            class="col-md-6 col-lg-4 mb-3">
+
+                            <nuxt-link :to="`/posts/${post._id}`">
+                                <div class="card rounded-0 post">
+                                    <div class="card-header p-0">
+                                        <img src="https://picsum.photos/300/200">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ post.title }}</h5>
+                                    </div>
+                                </div>
+                            </nuxt-link>
+                            
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        
     </section>
 </template>
 
@@ -27,16 +47,23 @@
 <script lang="ts">
 import { Component, Vue } from "nuxt-property-decorator";
 import { Context } from "@nuxt/types";
-import { IPostClient, IBlogClient } from "~/interfaces/basic";
+import { IPostClient, IBlogClient, IAuthor } from "~/interfaces/basic";
 
 interface Data {
     blog: IBlogClient | null
+    author: IAuthor | null
     posts: IPostClient[] | []
 }
 
-@Component
+@Component({
+    layout: "blog",
+    components: {
+        AuthorCard: () => import("~/components/UIWidgets/AuthorCard.vue")
+    }
+})
 export default class Blogs_blogId extends Vue {
     blog: Data["blog"] = null
+    author: Data["author"] = null
     posts: Data["posts"] = []
 
     async asyncData(context: Context): Promise<Data | void>{
@@ -45,8 +72,9 @@ export default class Blogs_blogId extends Vue {
 
         try {
             const { blog }: { blog: IBlogClient } = await app.$axios.$get(`/api/blogs/${blogId}`);
+            const { author }: { author: IAuthor } = await app.$axios.$get(`/api/authors/${blog.author}`);
             const { posts }: { posts: IPostClient[] } = await app.$axios.$get(`/api/posts/blog/${blogId}`);
-            return { blog, posts };
+            return { blog, author, posts };
         } catch(e){
             console.log(e.response);
         }
@@ -59,5 +87,33 @@ export default class Blogs_blogId extends Vue {
     height: 400px;
     background-size: cover;
     color: white;
+
+    .blog-intro {
+        white-space: pre-line;
+    }
+}
+
+.post {
+    .card-header {
+        overflow: hidden;
+
+        img {
+            display: block;
+            width: 100%;
+            transition: all .3s;
+        }
+    }
+
+    .card-body {
+        background: #fafafa;
+    }
+
+    &:hover {
+        color: #007bff;
+
+        img {
+            transform: scale(1.1);
+        }
+    }
 }
 </style>

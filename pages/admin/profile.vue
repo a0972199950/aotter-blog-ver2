@@ -1,11 +1,14 @@
 <template>
     <section class="container">
-        <h3>我的頁面</h3>
+        <h1 class="page-title">我的頁面</h1>
 
-        <div class="avatar">
+        <label>大頭照</label>
+        <div class="avatar mb-3">
             <img :src="avatarUrl" ref="avatar">
             <div class="middle">
-                <button @click="changeAvatar" class="btn btn-primary rounded-0">變更頭像</button>
+                <button @click="changeAvatar" class="btn btn-secondary rounded-circle">
+                    <font-awesome-icon :icon="['fas', 'camera']" />
+                </button>
                 <input type="file" ref="fileSelector" @change="fileSelected" style="display: none">
             </div>
         </div>
@@ -16,13 +19,18 @@
         </div>
 
         <div class="form-group">
-            <label for="birthday">生日</label>
-            <input type="date" id="birthday" v-model="formData.birthday" class="form-control">
+            <label for="facebook">Facebook</label>
+            <input type="text" id="facebook" v-model="formData.socialMedias.facebook" class="form-control">
         </div>
 
         <div class="form-group">
-            <label for="phone">連絡電話</label>
-            <input type="text" id="phone" v-model="formData.phone" class="form-control">
+            <label for="twitter">Twitter</label>
+            <input type="text" id="twitter" v-model="formData.socialMedias.twitter" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="instagram">Instagram</label>
+            <input type="text" id="instagram" v-model="formData.socialMedias.instagram" class="form-control">
         </div>
 
         <button class="btn btn-primary btn-block" @click="save">儲存</button>
@@ -39,14 +47,13 @@ import { IUserClient } from "~/interfaces/basic";
 
 
 interface FormData {
-    name: string | null,
-    birthday: string | null,
-    phone: string | null
+    name: IUserClient["name"]
+    socialMedias: IUserClient["socialMedias"]
 }
 
 interface Data {
-    avatarUrl: string | null
-    formData: FormData
+    avatarUrl: IUserClient["avatarUrl"] | null
+    formData: FormData | null
 }
 
 @Component({
@@ -55,11 +62,7 @@ interface Data {
 })
 export default class AdminProfile extends Vue {
     avatarUrl: Data["avatarUrl"] = null
-    formData: FormData = {
-        name: null,
-        birthday: null,
-        phone: null
-    }
+    formData: Data["formData"] = null
 
     asyncData(context: Context): Data | void{
         const store: Store<IState> = context.store;
@@ -69,8 +72,11 @@ export default class AdminProfile extends Vue {
                 avatarUrl: user.avatarUrl,
                 formData: {
                     name: user.name,
-                    birthday: user.birthday,
-                    phone: user.phone
+                    socialMedias: user.socialMedias || {
+                        facebook: null,
+                        twitter: null,
+                        instagram: null
+                    }
                 }
             }
         }

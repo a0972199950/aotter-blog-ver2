@@ -5,6 +5,7 @@
             <input type="text" id="title" class="form-control" v-model="post.title">
         </div>
 
+        <label for="content">內文</label>
         <Editor 
             :delta="post.content"
             @change="onEditorChange" />
@@ -17,6 +18,10 @@
 import { Component, Vue, Prop } from "nuxt-property-decorator";
 import { IPostClient } from "~/interfaces/basic";
 
+interface IEditorPayload {
+    content: IPostClient["content"]
+    text: IPostClient["text"]
+}
 
 @Component({
     components: {
@@ -27,8 +32,8 @@ export default class FormsPost extends Vue{
     @Prop(Object) 
     readonly post: IPostClient | undefined
 
-    onEditorChange(deltaOps: IPostClient["content"]){
-        this.$emit("change", deltaOps);
+    onEditorChange(editorPayload: IEditorPayload){
+        this.$emit("change", editorPayload);
     }
 }
 </script>

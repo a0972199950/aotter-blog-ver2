@@ -26,7 +26,7 @@ export default class AdminLayout extends Vue{}
 
 <style lang="scss" scoped>
 #layout {
-    padding-top: 56px;
+    padding-top: 70px;
 }
 </style>
     

@@ -1,12 +1,10 @@
 <template>
-    <section>
-        <quill-editor 
-            v-model="html"
-            ref="quillEditor"
-            :options="editorOption"
-            @ready="onEditorReady($event)"
-            @change="onEditorChange($event)" />
-    </section>
+    <quill-editor 
+        v-model="html"
+        ref="quillEditor"
+        :options="editorOption"
+        @ready="onEditorReady($event)"
+        @change="onEditorChange($event)" />
 </template>
 
 
@@ -23,7 +21,7 @@ interface IQuillChangeArg {
 @Component
 export default class UIWidgetsEditor extends Vue {
     @Prop({ type: Array, default: [] })
-    readonly delta : any
+    readonly delta: any
 
     html: string | null = null
 
@@ -52,11 +50,14 @@ export default class UIWidgetsEditor extends Vue {
     }
 
     onEditorReady(quill: Quill){
-        quill.setContents(this.delta);
+        const result = quill.setContents(this.delta);
+        console.log("result", result);
     }
 
     onEditorChange(e: any){
-        this.$emit("change", e.quill.editor.delta.ops);
+        const content: any[] = e.quill.editor.delta.ops;
+        const text: string = e.text;
+        this.$emit("change", { content, text });
     }
 
 }

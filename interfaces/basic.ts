@@ -25,6 +25,11 @@ export interface IUser extends IDocument {
     avatarUrl: string
     birthday: string
     phone: string
+    socialMedias: {
+        facebook: string
+        twitter: string
+        instagram: string
+    }
     tokens: string[]
     blog: string | IBlog
     posts: IPost[]
@@ -42,6 +47,8 @@ export interface IBlog extends IDocument{
 export interface IPost extends IDocument {
     title: string
     content: DeltaOperation[]
+    text: string
+    views: number
     author: string | IUser
     belongToBlog: string | IBlog
 }
@@ -50,7 +57,9 @@ export interface IAuthor {
     _id: IBlog["_id"]
     avatarUrl: IUser["avatarUrl"]
     blogName: IBlog["name"]
+    name: IUser["name"]
     blogIntro: IBlog["intro"]
+    socialMedias: IUser["socialMedias"]
 }
 
 export interface IUserClient extends IDocument {
@@ -59,6 +68,7 @@ export interface IUserClient extends IDocument {
     avatarUrl: IUser["avatarUrl"]
     birthday: IUser["birthday"]
     phone: IUser["phone"]
+    socialMedias: IUser["socialMedias"]
     blog: string
 }
 
@@ -72,6 +82,8 @@ export interface IBlogClient extends IDocument {
 export interface IPostClient extends IDocument {
     title: IPost["title"]
     content: IPost["content"]
+    text: IPost["text"]
+    views: IPost["views"]
     author: string
     belongToBlog: string
 }

@@ -80,7 +80,7 @@ section {
 	.card {
 		background: rgba(255, 255, 255, .8);
 		.card-body {
-			width: 16rem;
+			width: 20rem;
 		}
 	}
 }

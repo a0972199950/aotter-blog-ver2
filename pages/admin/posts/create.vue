@@ -1,7 +1,7 @@
 <template>
     <section>
         <PostForm :post="post" @change="onEditorChange">
-            <div class="row" slot="actions">
+            <div class="row mt-3" slot="actions">
                 <div class="col-md-6">
                     <button class="btn btn-primary btn-block" @click="save">新增文章</button>
                 </div>
@@ -18,9 +18,15 @@
 import { Component, Vue } from "nuxt-property-decorator";
 import { IPostClient } from "~/interfaces/basic";
 
+interface IEditorPayload {
+    content: IPostClient["content"]
+    text: IPostClient["text"]
+}
+
 interface Data {
     title: IPostClient["title"] | null
     content: IPostClient["content"] | null
+    text: IPostClient["text"] | null
 }
 
 @Component({
@@ -33,11 +39,12 @@ interface Data {
 export default class AdminPostsCreate extends Vue {
     post: Data = {
         title: null,
-        content: null
+        content: null,
+        text: null
     }
 
-    onEditorChange(deltaOps: IPostClient["content"]){
-        this.post.content = deltaOps;
+    onEditorChange(editorPayload: IEditorPayload){
+        this.post = Object.assign(this.post, editorPayload);
     }
 
     async save(): Promise<void>{
@@ -53,9 +60,15 @@ export default class AdminPostsCreate extends Vue {
     }
 
     cancel(): void{
-        if(confirm("確定要離開嗎？所做的變更將不會被儲存")){
-            this.$router.go(-1);
-        }
+        this.$swal({
+            title: "確定要退出嗎？",
+            text: "未完成內容將不會保留",
+            icon: "warning"
+        }).then((confirm) => {
+            if(confirm){
+                this.$router.push("/admin/posts");
+            }
+        })
     }
 }
 </script>

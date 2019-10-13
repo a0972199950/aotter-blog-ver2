@@ -12,20 +12,7 @@ import bcrypt from "bcryptjs";
 import { IUser, IAuthor } from "../../interfaces/basic";
 
 
-export interface IUserDocument extends Document{
-    [key: string]: any
-
-    // 定義欄位類型
-    email: IUser["email"]
-    password: IUser["password"]
-    name: IUser["name"]
-    avatar: IUser["avatar"]
-    avatarUrl: IUser["avatarUrl"]
-    birthday: IUser["birthday"]
-    phone: IUser["phone"]
-    tokens: IUser["tokens"]
-    blog: IUser["blog"]
-
+export interface IUserDocument extends IUser, Document{
     // 定義實例方法接口
     generateToken: () => Promise<string | void>
     mapUserToAuthor: () => IAuthor
@@ -70,6 +57,12 @@ const createSchemaDefinition = (): SchemaDefinition => {
         default: ""
     };
 
+    const socialMedias: SchemaTypeOpts<any> = {
+        facebook: { type: String },
+        twitter: { type: String },
+        instagram: { type: String }
+    }
+
     const tokens: SchemaTypeOpts<any>[] = [
         { type: String }
     ];
@@ -79,7 +72,7 @@ const createSchemaDefinition = (): SchemaDefinition => {
         ref: "Blog"
     }
 
-    return { email, password, name, avatar, avatarUrl, birthday, phone, tokens, blog }
+    return { email, password, name, avatar, avatarUrl, birthday, phone, socialMedias, tokens, blog }
 }
 
 const createSchemaOptions = (): SchemaOptions => ({
@@ -117,8 +110,10 @@ UserSchema.methods.mapUserToAuthor = function(): IAuthor {
     return { 
         _id: user.blog._id,
         avatarUrl: user.avatarUrl,
-        blogName: user.blog.name, 
-        blogIntro: user.blog.intro
+        blogName: user.blog.name,
+        name: user.name,
+        blogIntro: user.blog.intro,
+        socialMedias: user.socialMedias
     };
 }
 
