@@ -7,9 +7,9 @@
 
         <div class="card-body pb-0">
             <nuxt-link :to="`/blogs/${author._id}`">
-                <h3>{{ author.blogName }}</h3>
+                <h3 class="blog-name">{{ author.blogName }}</h3>
             </nuxt-link>
-            <h5 class="name">{{ author.name }}</h5>
+            <h5 class="name">{{ author.name || "匿名" }}</h5>
             <p>{{ author.blogIntro }}</p>
         </div>
 
@@ -62,6 +62,12 @@ export default class UIWidgetsAuthorCard extends Vue {
             width: 100%;
             transition: all .3s;
         }
+    }
+
+    .blog-name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .name {

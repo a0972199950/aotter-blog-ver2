@@ -28,6 +28,7 @@
     "@types/quill": "^2.0.3",
     "@types/sharp": "^0.22.3",
     "@types/validator": "^10.11.3",
+    "@types/vuelidate": "^0.7.7",
     "bcryptjs": "^2.4.3",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.3",
@@ -45,7 +46,8 @@
     "sweetalert": "^2.1.2",
     "ts-node": "^8.4.1",
     "validator": "^11.1.0",
-    "vue-quill-editor": "^3.0.6"
+    "vue-quill-editor": "^3.0.6",
+    "vuelidate": "^0.7.4"
   },
   "devDependencies": {
     "@nuxt/typescript-build": "^0.2.10",

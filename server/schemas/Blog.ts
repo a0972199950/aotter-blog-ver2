@@ -57,6 +57,15 @@ const createSchemaOptions = (): SchemaOptions => ({
 
 const BlogSchema: Schema = new Schema(createSchemaDefinition(), createSchemaOptions());
 
+BlogSchema.methods.toJSON = function () {
+    const blog = this;
+    const blogPureObj = blog.toObject();
+
+    delete blogPureObj.cover;
+
+    return blogPureObj;
+};
+
 BlogSchema.virtual("posts", {
     ref: "Post",
     localField: "_id",

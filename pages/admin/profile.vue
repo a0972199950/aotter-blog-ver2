@@ -6,8 +6,8 @@
         <div class="avatar mb-3">
             <img :src="avatarUrl" ref="avatar">
             <div class="middle">
-                <button @click="changeAvatar" class="btn btn-secondary rounded-circle">
-                    <font-awesome-icon :icon="['fas', 'camera']" />
+                <button @click="changeAvatar" class="btn btn-secondary rounded-circle p-3">
+                    <font-awesome-icon :icon="['fas', 'camera']" size="lg" />
                 </button>
                 <input type="file" ref="fileSelector" @change="fileSelected" style="display: none">
             </div>
@@ -128,6 +128,7 @@ export default class AdminProfile extends Vue {
     width: 250px;
     height: 250px;
     position: relative;
+
     img {
         width: 100%;
         height: 100%;

@@ -6,8 +6,8 @@
         <div class="blogCover mb-3">
             <img :src="blogCoverUrl" ref="blogCover">
             <div class="middle">
-                <button @click="changeBlogCover" class="btn btn-secondary rounded-circle">
-                    <font-awesome-icon :icon="['fas', 'camera']" />
+                <button @click="changeBlogCover" class="btn btn-secondary rounded-circle p-3">
+                    <font-awesome-icon :icon="['fas', 'camera']" size="lg" />
                 </button>
                 <input type="file" ref="fileSelector" @change="fileSelected" style="display: none">
             </div>
@@ -15,7 +15,14 @@
 
         <div class="form-group">
             <label for="blogName">部落格名稱</label>
-            <input type="text" id="blogName" v-model="formData.blogName" class="form-control">
+            <input 
+                type="text" 
+                id="blogName" 
+                v-model="formData.blogName" 
+                class="form-control"
+                :class="{ 'is-invalid': $v.formData.blogName.$error }"
+                @blur="$v.formData.blogName.$touch()">
+            <small class="invalid-feedback">部落格名稱必填</small>
         </div>
 
         <div class="form-group">
@@ -30,7 +37,9 @@
 
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator';
+import { Component, Vue, mixins } from 'nuxt-property-decorator';
+import { validationMixin } from "vuelidate";
+import { required } from "vuelidate/lib/validators";
 import { Context } from "@nuxt/types";
 import { Store } from "vuex";
 import { IState } from "~/store/index";
@@ -46,9 +55,16 @@ interface Data {
 
 @Component({
     middleware: "auth",
-    layout: "admin"
+
+    layout: "admin",
+
+    validations: {
+		formData: {
+			blogName: { required }
+		}
+	}
 })
-export default class AdminBlog extends Vue {
+export default class AdminBlog extends mixins(validationMixin) {
     blogCoverUrl: Data["blogCoverUrl"] = null
     formData: Data["formData"] = {
         blogName: null,
@@ -100,6 +116,8 @@ export default class AdminBlog extends Vue {
     }
 
     async save(): Promise<void>{
+        if(this.formInvalid()) return;
+
         const updates = this.formData;
 
         try {
@@ -111,6 +129,11 @@ export default class AdminBlog extends Vue {
             this.$swal("更新失敗", "", "error");
         }
     }
+
+    formInvalid(): boolean {
+		this.$v.$touch();
+		return this.$v.$invalid;
+	}
 }
 </script>
 
@@ -120,6 +143,7 @@ export default class AdminBlog extends Vue {
     width: 100%;
     height: 300px;
     position: relative;
+
     img {
         width: 100%;
         height: 100%;

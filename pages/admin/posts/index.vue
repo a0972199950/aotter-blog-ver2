@@ -2,7 +2,11 @@
     <section>
         <h1 class="page-title">文章編輯</h1>
 
-        <nuxt-link to="/admin/posts/create" class="btn btn-primary btn-block mb-3">新增</nuxt-link>
+        <nuxt-link to="/admin/posts/create">
+            <div class="new-post">
+                <font-awesome-icon :icon="['fas', 'plus-circle']" size="2x" :style="{ color: '#93989c' }" />  
+            </div>
+        </nuxt-link>
 
         <div 
             v-for="(post, index) in posts"
@@ -18,7 +22,13 @@
                 <div class="media-body">
                     <h3 class="mt-0 font-weight-bold">{{ post.title }}</h3>
                     {{ post.text | textLimiter(95) }}
-                    <div class="d-flex justify-content-end text-secondary mt-2">最後更新日期: {{ post.updatedAt | dateFormatter("YYYY-MM-DD HH:mm") }}</div>
+                    <div class="d-flex justify-content-end text-secondary mt-3">
+                        <span>最後更新日期: {{ post.updatedAt | dateFormatter("YYYY-MM-DD HH:mm") }}</span>
+                        <span class="ml-3">
+                            <font-awesome-icon :icon="['fas', 'eye']" />
+                            {{ post.views }}
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -74,6 +84,15 @@ export default class AdminPosts extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.new-post {
+    border: 1px dashed #dee2e6;
+    height: 100px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .edit, .delete {
     background: white;
     color: inherit;

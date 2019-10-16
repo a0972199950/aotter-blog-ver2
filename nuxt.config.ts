@@ -49,6 +49,7 @@ const config: Configuration = {
     "~/plugins/font-awesome",
     "~/plugins/axios",
     "~/plugins/sweetAlert",
+    "~/plugins/vuelidate",
     { src: "~/plugins/vue-quill-editor", mode: "client" },
   ],
   typescript: {

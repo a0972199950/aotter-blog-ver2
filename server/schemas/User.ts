@@ -101,8 +101,8 @@ UserSchema.methods.generateToken = async function(): Promise<string | void>{
         return token;
     } catch(e){
         return;
-    }
-}
+    };
+};
 
 UserSchema.methods.mapUserToAuthor = function(): IAuthor {
     const user = this;
@@ -115,7 +115,18 @@ UserSchema.methods.mapUserToAuthor = function(): IAuthor {
         blogIntro: user.blog.intro,
         socialMedias: user.socialMedias
     };
-}
+};
+
+UserSchema.methods.toJSON = function () {
+    const user = this;
+    const userPureObj = user.toObject();
+
+    delete userPureObj.password;
+    delete userPureObj.tokens;
+    delete userPureObj.avatar;
+
+    return userPureObj;
+};
 
 UserSchema.pre<IUserDocument>("save", async function(next: HookNextFunction): Promise<void>{
     if(this.password && this.isModified("password")){
@@ -126,6 +137,8 @@ UserSchema.pre<IUserDocument>("save", async function(next: HookNextFunction): Pr
             throw new Error("密碼加密失敗");
         }
     }
-})
+});
+
+
 
 export default UserSchema;

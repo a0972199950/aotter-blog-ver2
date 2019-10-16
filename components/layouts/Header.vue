@@ -39,25 +39,19 @@ export default class Header extends Vue {
 
     async logout(): Promise<void> {
         try {
-            await this.$axios.$get("/api/users/logout");
-			this.$store.commit("CLEAR_USER");
-			this.$store.commit("CLEAR_BLOG");
+            await this.$store.dispatch("logout");
             this.$router.push("/blogs");
         } catch (e) {
-			console.log(e.response);
-			this.$swal("登出失敗", "請查看console", "error");
+			this.$swal("登出失敗", e.message, "error");
         }
     }
 
     async logoutAll(): Promise<void> {
 		try {
-            await this.$axios.$get("/api/users/logout/all");
-            this.$store.commit("CLEAR_USER");
-            this.$store.commit("CLEAR_BLOG");
+            await this.$store.dispatch("logoutAll");
             this.$router.push("/blogs");
         } catch (e) {
-			console.log(e.response);
-			this.$swal("登出失敗", "請查看console", "error");
+			this.$swal("登出失敗", e.message, "error");
         }
     }
 }

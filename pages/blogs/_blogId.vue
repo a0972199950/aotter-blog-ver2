@@ -9,32 +9,42 @@
             </div>
         </div>
 
-        <div class="row px-5">
-            <div class="col-md-3">
-                <AuthorCard :author="author" />
-            </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9 border-right">
+                    <div class="container">
+                        <div class="row">
+                            <div 
+                                v-for="(post, index) in posts"
+                                :key="index"
+                                class="col-md-6 col-lg-4 mb-3">
 
-            <div class="col-md-9 border-left">
-                <div class="container">
-                    <div class="row">
-                        <div 
-                            v-for="(post, index) in posts"
-                            :key="index"
-                            class="col-md-6 col-lg-4 mb-3">
+                                <nuxt-link :to="`/posts/${post._id}`">
+                                    <div class="card rounded-0 post">
+                                        <div class="card-header p-0">
+                                            <img src="https://picsum.photos/300/200">
+                                        </div>
+                                        <div class="card-body pb-2">
+                                            <h5 class="card-title mb-3">{{ post.title }}</h5>
 
-                            <nuxt-link :to="`/posts/${post._id}`">
-                                <div class="card rounded-0 post">
-                                    <div class="card-header p-0">
-                                        <img src="https://picsum.photos/300/200">
+                                            <div class="d-flex justify-content-between">
+                                                <p class="m-0">{{ post.updatedAt | dateFormatter("YYYY-MM-DD HH:mm") }}</p>
+                                                <p class="m-0">
+                                                    <font-awesome-icon :icon="['fas', 'eye']" />
+                                                    {{ post.views }}
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ post.title }}</h5>
-                                    </div>
-                                </div>
-                            </nuxt-link>
-                            
+                                </nuxt-link>
+                                
+                            </div>
                         </div>
                     </div>
+                </div>
+
+                <div class="col-md-3">
+                    <AuthorCard :author="author" />
                 </div>
             </div>
         </div>
@@ -86,6 +96,7 @@ export default class Blogs_blogId extends Vue {
 .jumbotron {
     height: 400px;
     background-size: cover;
+    background-position: center center;
     color: white;
 
     .blog-intro {

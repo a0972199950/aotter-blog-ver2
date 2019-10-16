@@ -10,6 +10,8 @@
 import { Component, Vue } from "nuxt-property-decorator";
 
 
+
+
 declare namespace particlesJS {
     var load: (id: string, jsonSorece: string) => void
 }
@@ -24,6 +26,7 @@ export default class AdminLayout extends Vue{
         // https://github.com/VincentGarreau/particles.js/
         await import("particles.js");
         particlesJS.load('bg', '/api/config');
+
     }
 }
 </script>
