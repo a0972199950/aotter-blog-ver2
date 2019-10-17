@@ -11,13 +11,13 @@
 
         <div class="container">
             <div class="row">
-                <div class="col-md-9 border-right">
+                <div class="col-md-9 border-right order-2 order-md-1">
                     <div class="container">
                         <div class="row">
                             <div 
                                 v-for="(post, index) in posts"
                                 :key="index"
-                                class="col-md-6 col-lg-4 mb-3">
+                                class="col-md-6 col-xl-4 mb-3">
 
                                 <nuxt-link :to="`/posts/${post._id}`">
                                     <div class="card rounded-0 post">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-3 order-1 order-md-2">
                     <AuthorCard :author="author" />
                 </div>
             </div>

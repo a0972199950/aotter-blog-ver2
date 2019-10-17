@@ -5,12 +5,12 @@ import { IReqThroughMiddleware, IPost } from "../../interfaces/basic";
 import { IPostDocument } from "../schemas/Post";
 
 
-type TAllowedUpdateField = "title" | "content" | "text"
+type TAllowedUpdateField = "title" | "content" | "text" | "publish"
 
 class PostsController {
     // 新增文章
     public async create(req: IReqThroughMiddleware, res: Response): Promise<Response | void> {
-        const { title, content, text }: IPost = req.body;
+        const { title, content, text, publish }: IPost = req.body;
         const user = req.user;
         if(!user) return res.status(403).json({ message: "請先登入" });
 
@@ -18,7 +18,7 @@ class PostsController {
         const blogId = user.blog;
 
         const post: IPostDocument = new Post({
-            title, content, text,
+            title, content, text, publish,
             author: userId,
             belongToBlog: blogId
         });
@@ -36,7 +36,7 @@ class PostsController {
         const postId: string = req.params.postId;
 
         try {
-            const post = await Post.findById(postId);
+            const post = await Post.findOne({ _id: postId, publish: true });
             if(!post) return res.status(404).json({ message: "文章不存在" });
 
             post.views++;
@@ -48,7 +48,7 @@ class PostsController {
         }
     }
 
-    // 獲取單一用戶全部文章
+    // 獲取自己的全部文章
     public async fetchAll(req: IReqThroughMiddleware, res: Response): Promise<Response | void> {
         const user = req.user;
         if(!user) return res.status(404).json({ message: "找不到User" });
@@ -58,7 +58,7 @@ class PostsController {
                 .populate({ 
                     path: "posts",
                     options: {
-                        sort: { updatedAt: -1 }
+                        sort: { createdAt: -1 }
                     }
                 })
                 .execPopulate();
@@ -78,8 +78,9 @@ class PostsController {
                 .findById(blogId)
                 .populate({ 
                     path: "posts",
+                    match: { publish: true },
                     options: {
-                        sort: { updatedAt: -1 }
+                        sort: { createdAt: -1 }
                     }
                 })
                 .exec();
@@ -96,10 +97,10 @@ class PostsController {
         let post: IPostDocument | undefined = req.post;
         if(!post) return res.status(404).json({ message: "文章不存在" });
 
-        const allowedUpdateFields: TAllowedUpdateField[] = ["title", "content", "text"];
+        const allowedUpdateFields: TAllowedUpdateField[] = ["title", "content", "text", "publish"];
         post = allowedUpdateFields.reduce((post: IPostDocument, fieldName: string) => {
             const fieldValue = req.body[fieldName]
-            if(fieldValue){
+            if(fieldValue !== undefined){
                 post = Object.assign(post, { [fieldName]: fieldValue });
             };
 

@@ -38,7 +38,7 @@ interface Data {
 export default class AdminPosts_postId extends Vue {
     post: Data["post"] = null
 
-    async asyncData(context: Context): Promise<Data | void>{
+    async asyncData(context: Context): Promise<Data | void> {
         const { app, params } = context;
         const postId = params.postId;
 
@@ -55,16 +55,10 @@ export default class AdminPosts_postId extends Vue {
         this.post = Object.assign(this.post, editorPayload);
     }
 
-    async save(): Promise<void>{
-        const post = this.post;
-        if(!post) return;
-
-        const postId = post._id;
-        const updates = {
-            title: post.title,
-            content: post.content,
-            text: post.text
-        }
+    async save(): Promise<void> {
+        if(!this.post) return;
+        const { title, content, text, publish, _id: postId } = this.post;
+        const updates = { title, content, text, publish };
 
         try {
             await this.$axios.patch(`/api/posts/${postId}`, updates);
@@ -75,10 +69,16 @@ export default class AdminPosts_postId extends Vue {
         }
     }
 
-    cancel(): void{
-        if(confirm("確定要離開嗎？所做的變更將不會被儲存")){
-            this.$router.push("/admin/posts");
-        }
+    cancel(): void {
+        this.$swal({
+            title: "確定要退出嗎？",
+            text: "未完成內容將不會保留",
+            icon: "warning"
+        }).then((confirm) => {
+            if(confirm){
+                this.$router.push("/admin/posts");
+            }
+        });
     }
 }
 </script>

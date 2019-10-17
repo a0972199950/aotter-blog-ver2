@@ -10,6 +10,19 @@
             :delta="post.content"
             @change="onEditorChange" />
 
+        <div class="form-group-inline mt-3 mb-4">
+            <label class="mr-3 mb-0">是否公開？</label>
+
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="publish-1" class="custom-control-input" name="publish" v-model="post.publish" :value="true">
+                <label class="custom-control-label" for="publish-1">公開</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="publish-2" class="custom-control-input" name="publish" v-model="post.publish" :value="false">
+                <label class="custom-control-label" for="publish-2">隱藏</label>
+            </div>
+        </div>
+
         <slot name="actions"></slot>
     </section>
 </template>

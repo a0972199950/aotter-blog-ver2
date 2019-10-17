@@ -49,6 +49,7 @@ export interface IPost extends IDocument {
     content: DeltaOperation[]
     text: string
     views: number
+    publish: boolean
     author: string | IUser
     belongToBlog: string | IBlog
 }
@@ -84,6 +85,7 @@ export interface IPostClient extends IDocument {
     content: IPost["content"]
     text: IPost["text"]
     views: IPost["views"]
+    publish: IPost["publish"]
     author: string
     belongToBlog: string
 }

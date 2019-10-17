@@ -9,7 +9,7 @@ const router = express.Router();
 // 新增文章
 router.post("/", Auth.requireLogin, PostsController.create);
 
-// 獲取單一用戶全部文章
+// 獲取自己的全部文章
 router.get("/", Auth.requireLogin, PostsController.fetchAll);
 
 // 獲取單一部落格全部文章

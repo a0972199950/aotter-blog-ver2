@@ -23,10 +23,11 @@ interface IEditorPayload {
     text: IPostClient["text"]
 }
 
-interface Data {
+interface IData {
     title: IPostClient["title"] | null
     content: IPostClient["content"] | null
     text: IPostClient["text"] | null
+    publish: IPostClient["publish"]
 }
 
 @Component({
@@ -37,10 +38,11 @@ interface Data {
     }
 })
 export default class AdminPostsCreate extends Vue {
-    post: Data = {
+    post: IData = {
         title: null,
         content: null,
-        text: null
+        text: null,
+        publish: false
     }
 
     onEditorChange(editorPayload: IEditorPayload){
@@ -48,7 +50,7 @@ export default class AdminPostsCreate extends Vue {
     }
 
     async save(): Promise<void>{
-        const post: Data = this.post;
+        const post: IData = this.post;
 
         try {
             await this.$axios.$post("/api/posts", post);

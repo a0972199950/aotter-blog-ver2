@@ -22,12 +22,27 @@
                 <div class="media-body">
                     <h3 class="mt-0 font-weight-bold">{{ post.title }}</h3>
                     {{ post.text | textLimiter(95) }}
-                    <div class="d-flex justify-content-end text-secondary mt-3">
-                        <span>最後更新日期: {{ post.updatedAt | dateFormatter("YYYY-MM-DD HH:mm") }}</span>
-                        <span class="ml-3">
-                            <font-awesome-icon :icon="['fas', 'eye']" />
-                            {{ post.views }}
-                        </span>
+                    <div class="d-flex justify-content-between align-items-center text-secondary mt-3">
+                        <div>
+                            <b-form-checkbox 
+                                v-model="post.publish"
+                                :value="true"
+                                :unchecked-value="false"
+                                switch 
+                                size="lg" 
+                                button-variant="danger"
+                                @change="postPublishChange($event, post._id)">
+                                公開文章
+                            </b-form-checkbox>
+                        </div>
+
+                        <div>
+                            <span>最後更新日期: {{ post.updatedAt | dateFormatter("YYYY-MM-DD HH:mm") }}</span>
+                            <span class="ml-3">
+                                <font-awesome-icon :icon="['fas', 'eye']" />
+                                {{ post.views }}
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -45,7 +60,7 @@ import { IState } from "~/store/index";
 import { IPostClient } from "~/interfaces/basic"
 
 
-interface Data {
+interface IData {
     posts: IPostClient[]
 }
 
@@ -54,13 +69,13 @@ interface Data {
     middleware: "auth",
 })
 export default class AdminPosts extends Vue {
-    posts: Data["posts"] = []
+    posts: IData["posts"] = []
 
-    async asyncData(context: Context): Promise<Data>{
+    async asyncData(context: Context): Promise<IData>{
         const { app, store }: { app: NuxtAppOptions, store: Store<IState> } = context;
 
         try {
-            const { posts }: { posts: Data["posts"] } = await app.$axios.$get("/api/posts");
+            const { posts }: { posts: IData["posts"] } = await app.$axios.$get("/api/posts");
             return { posts }
         } catch(e){
             console.log(e.response);
@@ -78,6 +93,15 @@ export default class AdminPosts extends Vue {
                 console.log(e);
                 this.$swal("刪除失敗", "請查看console", "error");
             }
+        }
+    }
+
+    async postPublishChange(publish: boolean, postId: string): Promise<void> {
+        try {
+            await this.$axios.patch(`/api/posts/${postId}`, { publish });
+        } catch(e){
+            console.log(e);
+            this.$swal("修改失敗", "請查看console", "error");
         }
     }
 }
@@ -108,4 +132,28 @@ export default class AdminPosts extends Vue {
     background: red;
     color: white;
 }
+
+// .custom-switch {
+//     padding-left: 3rem;
+// }
+
+// .custom-control-label {
+//     &::before {
+//         width: 2.625rem;
+//         height: 1.5rem;
+//         left: -3rem;
+//         border-radius: 0.75rem;
+//     }
+
+//     &::after {
+//         width: calc(1.5rem - 4px);
+//         height: calc(1.5rem - 4px);
+//         left: calc(-3rem + 2px);
+//         border-radius: 0.75rem;
+//     }
+// }
+
+// .custom-control-input:checked ~ .custom-control-label::after {
+//     transform: translateX(1.125rem);
+// }
 </style>

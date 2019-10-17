@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import config from "config";
 import { IUserDocument } from "../schemas/User";
 import User from "../models/User";
 
@@ -46,8 +47,7 @@ class Auth{
         }
 
         try {
-            // TODO: 整理全域變數
-            const JWT_SECRET_KEY: string = "thisismyawesomejwtsecretstring";
+            const JWT_SECRET_KEY: string = config.get("JWT_SECRET_KEY");
             const encodedToken: (Token | string) = jwt.verify<Token>(token, JWT_SECRET_KEY);
 
             if(typeof encodedToken === "string") throw new Error();

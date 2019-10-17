@@ -67,7 +67,12 @@ const config: Configuration = {
     // Doc: https://bootstrap-vue.js.org/docs/
     'bootstrap-vue/nuxt',
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    ['nuxt-env', {
+      keys: [
+        { key: 'ENV_VAR', default: 'hello world' }
+      ]
+    }]
   ],
   /*
    ** Axios module configuration
