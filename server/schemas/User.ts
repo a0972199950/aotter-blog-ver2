@@ -89,6 +89,12 @@ UserSchema.virtual("posts", {
     foreignField: "author"
 });
 
+UserSchema.virtual("comments", {
+    ref: "Comment",
+    localField: "_id",
+    foreignField: "author"
+});
+
 UserSchema.methods.generateToken = async function(): Promise<string | void>{
     const user = this;
     const JWT_SECRET_KEY: string = config.get("JWT_SECRET_KEY");

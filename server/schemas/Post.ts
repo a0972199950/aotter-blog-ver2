@@ -7,7 +7,7 @@ import {
 } from "mongoose";
 import { IPost } from "../../interfaces/basic";
 
-export interface IPostDocument extends IPost, Document{
+export interface IPostDocument extends IPost, Document {
     // 定義實例方法接口
 }
 
@@ -55,6 +55,12 @@ const createSchemaOptions = (): SchemaOptions => ({
 });
 
 const PostSchema: Schema = new Schema(createSchemaDefinition(), createSchemaOptions());
+
+PostSchema.virtual("comments", {
+    ref: "Comment",
+    localField: "_id",
+    foreignField: "belongToPost"
+});
 
 
 export default PostSchema;

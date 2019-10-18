@@ -3,11 +3,13 @@ import { DeltaOperation } from "quill";
 import { IUserDocument } from "~/server/schemas/User";
 import { IBlogDocument } from "~/server/schemas/Blog";
 import { IPostDocument } from "~/server/schemas/Post";
+import { ICommentDocument } from "~/server/schemas/Comment";
 
 export interface IReqThroughMiddleware extends Request{
     user?: IUserDocument
     post?: IPostDocument
     blog?: IBlogDocument
+    comment?: ICommentDocument
     file: Express.Multer.File
 }
 
@@ -33,6 +35,7 @@ export interface IUser extends IDocument {
     tokens: string[]
     blog: string | IBlog
     posts: IPost[]
+    comments: IComment[]
 }
 
 export interface IBlog extends IDocument{
@@ -52,6 +55,13 @@ export interface IPost extends IDocument {
     publish: boolean
     author: string | IUser
     belongToBlog: string | IBlog
+    comments: IComment[]
+}
+
+export interface IComment extends IDocument {
+    text: string
+    author: IUser
+    belongToPost: IPost
 }
 
 export interface IAuthor {
@@ -88,4 +98,10 @@ export interface IPostClient extends IDocument {
     publish: IPost["publish"]
     author: string
     belongToBlog: string
+}
+
+export interface ICommentClient extends IDocument {
+    text: IComment["text"]
+    avatar: IUser["avatarUrl"]
+    name: IUser["name"]
 }
