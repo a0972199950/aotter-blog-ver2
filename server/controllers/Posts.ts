@@ -169,16 +169,17 @@ class PostsController {
                 .findOne({ _id: postId, publish: true })
                 .populate({
                     path: "comments",
-                    sort: { createdAt: -1 }
+                    options: {
+                        sort: { createdAt: -1 }
+                    }
                 })
                 .exec();
-
             if(!post) return res.status(404).json({ message: "文章不存在" });
 
             post.views++;
             await post.save();
 
-            const comments = post.comments //...an array filled with values
+            const comments = post.comments
 
             const anAsyncFunction = async comment => {
                 return await comment.mapClientField()

@@ -26,6 +26,19 @@
             <textarea v-model="formData.blogIntro" class="form-control" id="blogIntro" cols="30" rows="4"></textarea>
         </div>
 
+        <div class="form-group-inline mt-3 mb-4">
+            <label class="mr-3 mb-0">是否公開？</label>
+
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="publish-1" class="custom-control-input" name="publish" v-model="formData.blogPublish" :value="true">
+                <label class="custom-control-label" for="publish-1">公開</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="publish-2" class="custom-control-input" name="publish" v-model="formData.blogPublish" :value="false">
+                <label class="custom-control-label" for="publish-2">隱藏</label>
+            </div>
+        </div>
+
         <button class="btn btn-primary btn-block" @click="save">儲存</button>
         
     </section>
@@ -44,8 +57,9 @@ import { IUserClient, IBlogClient } from "~/interfaces/basic";
 interface IData {
     blogCoverUrl: string | null
     formData: {
-        blogName: string | null,
+        blogName: string | null
         blogIntro: string | null
+        blogPublish: boolean
     }
 }
 
@@ -68,7 +82,8 @@ export default class AdminBlog extends mixins(validationMixin) {
     blogCoverUrl: IData["blogCoverUrl"] = null
     formData: IData["formData"] = {
         blogName: null,
-        blogIntro: null
+        blogIntro: null,
+        blogPublish: false
     }
 
     asyncData(context: Context): IData | void {
@@ -76,12 +91,13 @@ export default class AdminBlog extends mixins(validationMixin) {
         const blog = store.state.blog;
 
         if(blog){
-            const { coverUrl, name, intro } = blog;
+            const { coverUrl, name, intro, publish } = blog;
             return {
                 blogCoverUrl: coverUrl,
                 formData: { 
                     blogName: name, 
-                    blogIntro: intro
+                    blogIntro: intro,
+                    blogPublish: publish
                 }
             }
         }

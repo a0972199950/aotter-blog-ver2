@@ -17,9 +17,9 @@ class UsersController{
             const user = new User({ email, password });
             const blog = new Blog({ name: blogName, author: user._id });
 
-            user.avatarUrl = `/api/users/avatar/${user._id}?${new Date().valueOf()}`;
+            user.avatarUrl = `/api/users/${user._id}/avatar?${new Date().valueOf()}`;
             user.blog = blog._id;
-            blog.coverUrl = `/api/blogs/cover/${blog._id}?${new Date().valueOf()}`;
+            blog.coverUrl = `/api/blogs/${blog._id}/cover?${new Date().valueOf()}`;
 
             const token = await user.generateToken();
             await blog.save();
@@ -101,7 +101,7 @@ class UsersController{
         const formattedAvatar = await sharp(originAvatar).resize(250, 250).jpeg().toBuffer();
         user = Object.assign(user, { 
             avatar: formattedAvatar,
-            avatarUrl: `/api/users/avatar/${user._id}?${new Date().valueOf()}`
+            avatarUrl: `/api/users/${user._id}/avatar?${new Date().valueOf()}`
         });
 
         try {

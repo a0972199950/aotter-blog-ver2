@@ -5,7 +5,7 @@
         </div>
         
         <div class="card-body pb-0">
-            <nuxt-link :to="`/blogs/${blog.author._id}`">
+            <nuxt-link :to="`/blogs/${blog._id}`">
                 <h3 class="blog-name">{{ blog.name }}</h3>
                 <h5 class="name">{{ blog.author.name || "匿名" }}</h5>
                 <p>{{ blog.intro }}</p>
@@ -45,7 +45,7 @@ interface IProp {
 @Component
 export default class UIWidgetsAuthorCard extends Vue {
     @Prop({ type: Object, default: {} })
-    readonly blog: IProp["blog"]
+    readonly blog!: IProp["blog"]
 }
 </script>
 

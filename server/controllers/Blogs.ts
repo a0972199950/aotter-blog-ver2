@@ -13,11 +13,11 @@ class BlogsController {
         const blogId = req.user!.blog;
 
         try {
-            const blog = Blog
+            const blog = await Blog
                 .findById(blogId)
                 .populate({
                     path: "author",
-                    select: "avatarUrl, name, socialMedias"
+                    select: "avatarUrl name socialMedias"
                 })
                 .exec();
 
@@ -33,7 +33,7 @@ class BlogsController {
         const updates = {
             name: req.body.blogName,
             intro: req.body.blogIntro,
-            publish: req.body.publish
+            publish: req.body.blogPublish
         }
 
         try {
@@ -45,7 +45,7 @@ class BlogsController {
     }
 
     // 上傳自己的部落格封面照片
-    public async uploadCover(req: IReqThroughMiddleware, res: Response): Promise<Response | void> {
+    public async uploadMyCover(req: IReqThroughMiddleware, res: Response): Promise<Response | void> {
         const blogId = req.user!.blog;
         
         try {
@@ -56,7 +56,7 @@ class BlogsController {
             const formattedCover = await sharp(originCover).resize(1200, 500).jpeg().toBuffer();
             blog = Object.assign(blog, { 
                 cover: formattedCover,
-                coverUrl: `/api/blogs/cover/${blogId}?${new Date().valueOf()}`
+                coverUrl: `/api/blogs/${blogId}/cover?${new Date().valueOf()}`
             });
         
             await blog.save();
@@ -73,7 +73,7 @@ class BlogsController {
                 .find({ publish: true })
                 .populate({
                     path: "author",
-                    select: "avatarUrl, name, socialMedias"
+                    select: "avatarUrl name socialMedias"
                 })
                 .exec();
 
@@ -92,7 +92,7 @@ class BlogsController {
                 .findOne({ _id: blogId, publish: true })
                 .populate({
                     path: "author",
-                    select: "avatarUrl, name, socialMedias"
+                    select: "avatarUrl name socialMedias"
                 })
                 .exec();
             if(!blog) return res.status(404).json({ message: "找不到部落格" });
