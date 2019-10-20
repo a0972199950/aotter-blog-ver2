@@ -1,12 +1,12 @@
 {
-  "name": "nuxt-typescript-test",
+  "name": "aotter-blog",
   "version": "1.0.0",
-  "description": "My praiseworthy Nuxt.js project",
+  "description": "aotter-blog",
   "author": "a0972199950",
   "private": true,
   "scripts": {
     "connect": "mongod --dbpath C:/Users/a0972/mongodb_data",
-    "dev": "nuxt-ts",
+    "dev": "env-cmd -f ./config/dev.env nuxt-ts",
     "build": "nuxt-ts build",
     "start": "nuxt-ts start",
     "generate": "nuxt-ts generate"
@@ -20,7 +20,6 @@
     "@nuxt/typescript-runtime": "^0.1.7",
     "@nuxtjs/axios": "^5.3.6",
     "@types/bcryptjs": "^2.4.2",
-    "@types/config": "0.0.34",
     "@types/cookie-parser": "^1.4.2",
     "@types/jsonwebtoken": "^8.3.4",
     "@types/moment": "^2.13.0",
@@ -33,7 +32,6 @@
     "bcryptjs": "^2.4.3",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.3",
-    "config": "^3.2.3",
     "cookie-parser": "^1.4.4",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.5.1",
@@ -41,6 +39,7 @@
     "mongoose": "^5.7.3",
     "multer": "^1.4.2",
     "nuxt": "^2.9.1",
+    "nuxt-env": "^0.1.0",
     "nuxt-property-decorator": "^2.4.0",
     "particles.js": "^2.0.0",
     "quill-delta-to-html": "^0.10.13",
@@ -53,6 +52,7 @@
   },
   "devDependencies": {
     "@nuxt/typescript-build": "^0.2.10",
+    "env-cmd": "^10.0.1",
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.0"
   }

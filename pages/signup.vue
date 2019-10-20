@@ -63,7 +63,7 @@ import { validationMixin } from "vuelidate";
 import { email, required } from "vuelidate/lib/validators";
 import { IUserClient, IBlogClient } from "~/interfaces/basic";
 
-interface Data {
+interface IData {
     formData: {
         email: string | null
         password: string | null
@@ -83,7 +83,7 @@ interface Data {
 	}
 })
 export default class Signup extends mixins(validationMixin) {
-    formData: Data["formData"] = {
+    formData: IData["formData"] = {
         email: null,
         password: null,
         blogName: null
@@ -96,7 +96,10 @@ export default class Signup extends mixins(validationMixin) {
 
 		try {
 			await this.$store.dispatch("signup", signupData);
-			this.$router.push("/admin/blog");
+			const redirectUrl = this.$route.query.redirectUrl || "/admin/blog";
+			if(typeof redirectUrl === "string"){
+				this.$router.push(redirectUrl);
+			}
 		} catch(e){
 			this.$swal("註冊失敗", e.message, "error");
 		}

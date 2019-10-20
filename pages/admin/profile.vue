@@ -1,17 +1,13 @@
 <template>
-    <section class="container">
+    <section>
         <h1 class="page-title">我的頁面</h1>
 
-        <label>大頭照</label>
-        <div class="avatar mb-3">
-            <img :src="avatarUrl" ref="avatar">
-            <div class="middle">
-                <button @click="changeAvatar" class="btn btn-secondary rounded-circle p-3">
-                    <font-awesome-icon :icon="['fas', 'camera']" size="lg" />
-                </button>
-                <input type="file" ref="fileSelector" @change="fileSelected" style="display: none">
-            </div>
-        </div>
+        <ImageInputer 
+            title="大頭照"
+            width="250px"
+            height="250px"
+            :imageUrl="avatarUrl"
+            @fileSelected="fileSelected" />
 
         <div class="form-group">
             <label for="name">姓名</label>
@@ -51,20 +47,23 @@ interface FormData {
     socialMedias: IUserClient["socialMedias"]
 }
 
-interface Data {
+interface IData {
     avatarUrl: IUserClient["avatarUrl"] | null
     formData: FormData | null
 }
 
 @Component({
     middleware: "auth",
-    layout: "admin"
+    layout: "admin",
+    components: {
+        ImageInputer: () => import("~/components/UIWidgets/ImageInputer.vue"),
+    }
 })
 export default class AdminProfile extends Vue {
-    avatarUrl: Data["avatarUrl"] = null
-    formData: Data["formData"] = null
+    avatarUrl: IData["avatarUrl"] = null
+    formData: IData["formData"] = null
 
-    asyncData(context: Context): Data | void{
+    asyncData(context: Context): IData | void {
         const store: Store<IState> = context.store;
         const user = store.state.user;
         if(user){
@@ -82,34 +81,22 @@ export default class AdminProfile extends Vue {
         }
     }
 
-    changeAvatar(){
-        const fileSelector = this.$refs.fileSelector;
-        if(fileSelector instanceof HTMLElement){
-            fileSelector.click();
-        }
-    }
-
-    async fileSelected(e: any): Promise<void>{
-        const avatar = e.target.files[0];
+    async fileSelected(avatar: Blob): Promise<void> {
         const formData = new FormData();
-        const img = this.$refs.avatar;
-
         formData.append("avatar", avatar);
+
         try {
             const { user } = await this.$axios.$post("/api/users/avatar", formData);
             this.$store.commit("SET_USER", user);
 
-            if(img instanceof HTMLImageElement){
-                img.src = user.avatarUrl;
-                this.$swal("更新成功", "", "success");
-            }
+            this.$swal("更新成功", "", "success");
         } catch(e){
             this.$swal("更新失敗", "", "error");
         }
         
     }
 
-    async save(): Promise<void>{
+    async save(): Promise<void> {
         const updates = this.formData;
 
         try {
@@ -123,36 +110,3 @@ export default class AdminProfile extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-.avatar {
-    width: 250px;
-    height: 250px;
-    position: relative;
-
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .middle {
-        transition: .5s ease;
-        opacity: 0;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        -ms-transform: translate(-50%, -50%)
-    }
-
-    &:hover {
-        img {
-            opacity: 0.3;
-        }
-
-        .middle {
-            opacity: 1;
-        }
-    }
-}
-</style>

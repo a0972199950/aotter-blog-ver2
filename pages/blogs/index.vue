@@ -14,19 +14,19 @@ import { Component, Vue } from "nuxt-property-decorator";
 import { Context } from "@nuxt/types";
 import { IAuthor } from "~/interfaces/basic";
 
-interface Data {
+interface IData {
     authors: IAuthor[]
 }
 
 @Component({
     components: {
-        AuthorCard: () => import("~/components/UIWidgets/AuthorCard.vue")
+        AuthorCard: () => import("~/components/AuthorCard.vue")
     }
 })
 export default class Blogs extends Vue {
-    authors: Data["authors"] = []
+    authors: IData["authors"] = []
 
-    async asyncData(context: Context): Promise<Data | void>{
+    async asyncData(context: Context): Promise<IData | void> {
         const { app } = context;
 
         try {

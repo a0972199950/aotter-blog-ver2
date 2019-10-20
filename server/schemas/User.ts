@@ -7,7 +7,6 @@ import {
     HookNextFunction
 } from "mongoose";
 import validator from "validator";
-import config from "config";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { IUser, IAuthor } from "../../interfaces/basic";
@@ -69,7 +68,7 @@ const createSchemaDefinition = (): SchemaDefinition => {
     ];
 
     const blog: SchemaTypeOpts<any> = {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: "Blog"
     }
 
@@ -97,8 +96,7 @@ UserSchema.virtual("comments", {
 
 UserSchema.methods.generateToken = async function(): Promise<string | void>{
     const user = this;
-    const JWT_SECRET_KEY: string = config.get("JWT_SECRET_KEY");
-    const token: string = jwt.sign({ _id: user.id }, JWT_SECRET_KEY);
+    const token: string = jwt.sign({ _id: user.id }, process.env.JWT_SECRET_KEY!);
 
     user.tokens = user.tokens.concat(token);
 

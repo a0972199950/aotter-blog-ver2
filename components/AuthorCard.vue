@@ -4,32 +4,31 @@
             <img :src="author.avatarUrl">
         </div>
         
-
         <div class="card-body pb-0">
             <nuxt-link :to="`/blogs/${author._id}`">
                 <h3 class="blog-name">{{ author.blogName }}</h3>
+                <h5 class="name">{{ author.name || "匿名" }}</h5>
+                <p>{{ author.blogIntro }}</p>
             </nuxt-link>
-            <h5 class="name">{{ author.name || "匿名" }}</h5>
-            <p>{{ author.blogIntro }}</p>
-        </div>
 
-        <div class="d-flex justify-content-center">
-            <div v-if="author.socialMedias.facebook" class="p-3">
-                <a :href="author.socialMedias.facebook" target="blank">
-                    <font-awesome-icon :icon="['fab', 'facebook']" />
-                </a>
-            </div>
+            <div class="d-flex justify-content-center">
+                <div v-if="author.socialMedias.facebook" class="p-3">
+                    <a :href="author.socialMedias.facebook" target="blank">
+                        <font-awesome-icon :icon="['fab', 'facebook']" />
+                    </a>
+                </div>
 
-            <div v-if="author.socialMedias.twitter" class="p-3">
-                <a :href="author.socialMedias.twitter" target="blank">
-                    <font-awesome-icon :icon="['fab', 'twitter']" />
-                </a>
-            </div>
+                <div v-if="author.socialMedias.twitter" class="p-3">
+                    <a :href="author.socialMedias.twitter" target="blank">
+                        <font-awesome-icon :icon="['fab', 'twitter']" />
+                    </a>
+                </div>
 
-            <div v-if="author.socialMedias.instagram" class="p-3">
-                <a :href="author.socialMedias.instagram" target="blank">
-                    <font-awesome-icon :icon="['fab', 'instagram']" />
-                </a>
+                <div v-if="author.socialMedias.instagram" class="p-3">
+                    <a :href="author.socialMedias.instagram" target="blank">
+                        <font-awesome-icon :icon="['fab', 'instagram']" />
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -37,7 +36,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "nuxt-property-decorator";
-import { IAuthor } from "../../interfaces/basic";
+import { IAuthor } from "~/interfaces/basic";
 
 @Component
 export default class UIWidgetsAuthorCard extends Vue {
@@ -68,6 +67,7 @@ export default class UIWidgetsAuthorCard extends Vue {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        font-weight: bold;
     }
 
     .name {

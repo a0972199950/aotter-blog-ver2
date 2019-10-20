@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Comment from "../models/Comment";
-import { IReqThroughMiddleware, IComment } from "../../interfaces/basic";
+import { IReqThroughMiddleware, IComment, ICommentClient } from "../../interfaces/basic";
 import { ICommentDocument } from "../schemas/Comment";
 
 
@@ -8,8 +8,8 @@ class CommentController {
 	// 新增留言
 	public async create(req: IReqThroughMiddleware, res: Response): Promise<Response | void> {
 		const text = req.body.text;
-		const postId: string = req.params.postId;
-		const userId: string = req.user!._id;
+		const postId = req.params.postId;
+		const userId = req.user!._id;
 		const comment = new Comment({
 			text,
 			author: userId,
@@ -18,9 +18,8 @@ class CommentController {
 
 		try {
 			await comment.save();
-			// TODO: 待新增方法
-			await comment.mapClientField();
-			res.json({ comment });
+			const commentClient: ICommentClient = await comment.mapClientField();
+			res.json({ comment: commentClient });
 		} catch(e){
 			res.status(500).json({ message: e.message });
 		};

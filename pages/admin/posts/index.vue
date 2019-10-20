@@ -1,6 +1,6 @@
 <template>
     <section>
-        <h1 class="page-title">文章編輯</h1>
+        <h1 class="page-title">文章列表</h1>
 
         <nuxt-link to="/admin/posts/create">
             <div class="new-post">
@@ -32,7 +32,7 @@
                                 size="lg" 
                                 button-variant="danger"
                                 @change="postPublishChange($event, post._id)">
-                                公開文章
+                                {{ post.publish ? "公開文章" : "隱藏文章" }}
                             </b-form-checkbox>
                         </div>
 
@@ -71,11 +71,11 @@ interface IData {
 export default class AdminPosts extends Vue {
     posts: IData["posts"] = []
 
-    async asyncData(context: Context): Promise<IData>{
+    async asyncData(context: Context): Promise<IData> {
         const { app, store }: { app: NuxtAppOptions, store: Store<IState> } = context;
 
         try {
-            const { posts }: { posts: IData["posts"] } = await app.$axios.$get("/api/posts");
+            const { posts }: { posts: IData["posts"] } = await app.$axios.$get("/api/posts/me");
             return { posts }
         } catch(e){
             console.log(e.response);
@@ -84,24 +84,24 @@ export default class AdminPosts extends Vue {
         
     }
 
-    async remove(postId: string): Promise<void>{
+    async remove(postId: string): Promise<void> {
         if(confirm("確定要刪除嗎？")){
             try {
-                await this.$axios.delete(`/api/posts/${postId}`);
+                await this.$axios.delete(`/api/posts/me/${postId}`);
                 this.$router.go(0);
             } catch(e){
                 console.log(e);
-                this.$swal("刪除失敗", "請查看console", "error");
+                this.$swal("刪除失敗", e.response.data.message, "error");
             }
         }
     }
 
     async postPublishChange(publish: boolean, postId: string): Promise<void> {
         try {
-            await this.$axios.patch(`/api/posts/${postId}`, { publish });
+            await this.$axios.patch(`/api/posts/me/${postId}`, { publish });
         } catch(e){
             console.log(e);
-            this.$swal("修改失敗", "請查看console", "error");
+            this.$swal("修改失敗", e.response.data.message, "error");
         }
     }
 }
@@ -132,28 +132,4 @@ export default class AdminPosts extends Vue {
     background: red;
     color: white;
 }
-
-// .custom-switch {
-//     padding-left: 3rem;
-// }
-
-// .custom-control-label {
-//     &::before {
-//         width: 2.625rem;
-//         height: 1.5rem;
-//         left: -3rem;
-//         border-radius: 0.75rem;
-//     }
-
-//     &::after {
-//         width: calc(1.5rem - 4px);
-//         height: calc(1.5rem - 4px);
-//         left: calc(-3rem + 2px);
-//         border-radius: 0.75rem;
-//     }
-// }
-
-// .custom-control-input:checked ~ .custom-control-label::after {
-//     transform: translateX(1.125rem);
-// }
 </style>

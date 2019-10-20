@@ -50,7 +50,7 @@ import { validationMixin } from "vuelidate";
 import { email, required } from "vuelidate/lib/validators";
 import { IUserClient, IBlogClient } from "~/interfaces/basic";
 
-interface Data {
+interface IData {
 	formData: {
 		email: string | null
 		password: string | null
@@ -68,19 +68,23 @@ interface Data {
 	}
 })
 export default class Index extends mixins(validationMixin) {
-	formData: Data["formData"] = {
+	formData: IData["formData"] = {
 		email: null,
 		password: null
 	}
 
-	async login(): Promise<void>{
+	async login(): Promise<void> {
 		if(this.formInvalid()) return;
 
 		const loginData = this.formData;
 		
 		try {
 			await this.$store.dispatch("login", loginData);
-			this.$router.push("/blogs");
+
+			const redirectUrl = this.$route.query.redirectUrl || "/blogs";
+			if(typeof redirectUrl === "string"){
+				this.$router.push(redirectUrl);
+			}
 		} catch(e){
 			this.$swal("登入失敗", e.message, "error");
 		}

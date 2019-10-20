@@ -9,9 +9,6 @@
 <script lang="ts">
 import { Component, Vue } from "nuxt-property-decorator";
 
-
-
-
 declare namespace particlesJS {
     var load: (id: string, jsonSorece: string) => void
 }

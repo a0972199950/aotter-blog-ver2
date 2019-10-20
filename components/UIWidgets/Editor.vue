@@ -44,14 +44,15 @@ export default class UIWidgetsEditor extends Vue {
                 [{ 'font': [] }],
                 [{ 'align': [] }],
 
-                ['clean']                                         // remove formatting button
+                ['clean'],                                        // remove formatting button
+                [ 'link', 'image' ],          // add's image support
             ]
+
         }
     }
 
     onEditorReady(quill: Quill){
         const result = quill.setContents(this.delta);
-        console.log("result", result);
     }
 
     onEditorChange(e: any){

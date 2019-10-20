@@ -17,7 +17,7 @@ class Owner {
             const post: IPostDocument | null = await Post.findById(postId);
             if(!post) return res.status(404).json({ message: "文章不存在" });
 
-            if(post.author !== userId) return res.status(403).json({ message: "只有作者可以修改/刪除文章" });
+            if(post.author.toString() !== userId.toString()) return res.status(403).json({ message: "只有作者可以修改/刪除文章" });
 
             req = Object.assign(req, { post });
             next();
@@ -34,7 +34,7 @@ class Owner {
             const blog: IBlogDocument | null = await Blog.findById(blogId);
             if(!blog) return res.status(404).json({ message: "部落格不存在" });
 
-            if(blog.author !== userId) return res.status(403).json({ message: "只有作者可以修改部落格" });
+            if(blog.author.toString() !== userId.toString()) return res.status(403).json({ message: "只有作者可以修改部落格" });
 
             req = Object.assign(req, { blog });
             next();
@@ -51,7 +51,7 @@ class Owner {
             const comment: ICommentDocument | null = await Comment.findById(commentId);
             if(!comment) return res.status(404).json({ message: "留言不存在" });
 
-            if(comment.author !== userId) return res.status(403).json({ message: "只有留言者可以刪除留言" });
+            if(comment.author.toString() !== userId.toString()) return res.status(403).json({ message: "只有留言者可以刪除留言" });
 
             req = Object.assign(req, { comment });
             next();

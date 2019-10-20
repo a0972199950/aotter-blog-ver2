@@ -11,7 +11,7 @@ class BlogsController {
     // 讀取全部部落格資料
     public async fetchAll(req: Request, res: Response): Promise<Response | void> {
         try {
-            const blogs: IBlogDocument[] | [] = await Blog.find({});
+            const blogs: IBlogDocument[] | [] = await Blog.find({ publish: true });
             res.json({ blogs });
         } catch(e){
             res.status(500).json({ message: e.message });
@@ -26,7 +26,8 @@ class BlogsController {
         const blogId = user.blog;
         const updates = {
             name: req.body.blogName,
-            intro: req.body.blogIntro
+            intro: req.body.blogIntro,
+            publish: req.body.publish
         }
 
         try {
@@ -37,12 +38,24 @@ class BlogsController {
         }
     }
 
-    // 讀取單一部落格資料
+    // 讀取自己的部落格資料
+    public async fetchMe(req: IReqThroughMiddleware, res: Response): Promise<Response | void> {
+        const user = req.user!;
+
+        try {
+            await user.populate("blog").execPopulate();
+            res.json({ blog: user.blog });
+        } catch(e){
+            res.status(500).json({ message: e.message });
+        };
+    }
+
+    // 讀取任一部落格資料
     public async fetch(req: Request, res: Response): Promise<Response | void> {
         const blogId: string = req.params.blogId;
 
         try {
-            const blog: IBlogDocument | null = await Blog.findById(blogId);
+            const blog: IBlogDocument | null = await Blog.findOne({ _id: blogId, publish: true });
             if(!blog) return res.status(404).json({ message: "找不到部落格" });
             res.json({ blog });
         } catch(e){
@@ -53,9 +66,8 @@ class BlogsController {
     // 上傳部落格封面照片
     public async uploadCover(req: IReqThroughMiddleware, res: Response): Promise<Response | void> {
         const user = req.user;
-        if(!user) return res.status(403).json({ message: "請先登入" });
 
-        const blogId = user.blog;
+        const blogId = user!.blog;
         let blog = await Blog.findById(blogId);
         if(!blog) return res.status(404).json({ message: "部落格不存在" });
 
@@ -84,7 +96,7 @@ class BlogsController {
                 .select("cover")
                 .exec();
 
-            if(!blog) return res.status(404).json({ error: "部落格封面照片不存在" });
+            if(!blog) return res.status(404).json({ error: "部落格不存在" });
 
             const cover = blog.cover || fs.readFileSync(path.join(__dirname, "../../static/image/blogCover-default.jpg"));
             res.set("Content-Type", "image/jpeg");

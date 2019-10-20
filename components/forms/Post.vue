@@ -1,5 +1,12 @@
 <template>
     <section>
+        <ImageInputer 
+            title="封面圖片"
+            width="300px"
+            height="200px"
+            :imageUrl="post.coverUrl"
+            @fileSelected="fileSelected" />
+
         <div class="form-group">
             <label for="title">標題</label>
             <input type="text" id="title" class="form-control" v-model="post.title">
@@ -31,6 +38,10 @@
 import { Component, Vue, Prop } from "nuxt-property-decorator";
 import { IPostClient } from "~/interfaces/basic";
 
+interface IProp {
+    post: IPostClient | null
+}
+
 interface IEditorPayload {
     content: IPostClient["content"]
     text: IPostClient["text"]
@@ -38,15 +49,54 @@ interface IEditorPayload {
 
 @Component({
     components: {
+        ImageInputer: () => import("~/components/UIWidgets/ImageInputer.vue"),
         Editor: () => import("~/components/UIWidgets/Editor.vue")
     }
 })
 export default class FormsPost extends Vue{
-    @Prop(Object) 
-    readonly post: IPostClient | undefined
+    @Prop({ type: Object, default: null }) 
+    readonly post!: IProp["post"]
 
-    onEditorChange(editorPayload: IEditorPayload){
+    onEditorChange(editorPayload: IEditorPayload): void {
         this.$emit("change", editorPayload);
+    }
+
+    fileSelected(image: Blob): void {
+        this.$emit("fileSelected", image);
     }
 }
 </script>
+
+<style lang="scss" scoped>
+.cover {
+    width: 300px;
+    height: 200px;
+    position: relative;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .middle {
+        transition: .5s ease;
+        opacity: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%)
+    }
+
+    &:hover {
+        img {
+            opacity: 0.3;
+        }
+
+        .middle {
+            opacity: 1;
+        }
+    }
+}
+</style>

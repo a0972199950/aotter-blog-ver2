@@ -1,17 +1,13 @@
 <template>
-    <section class="container">
+    <section>
         <h1 class="page-title">部落格設定</h1>
 
-        <label>封面圖片</label>
-        <div class="blogCover mb-3">
-            <img :src="blogCoverUrl" ref="blogCover">
-            <div class="middle">
-                <button @click="changeBlogCover" class="btn btn-secondary rounded-circle p-3">
-                    <font-awesome-icon :icon="['fas', 'camera']" size="lg" />
-                </button>
-                <input type="file" ref="fileSelector" @change="fileSelected" style="display: none">
-            </div>
-        </div>
+        <ImageInputer 
+            title="封面圖片"
+            width="100%"
+            height="300px"
+            :imageUrl="blogCoverUrl"
+            @fileSelected="fileSelected" />
 
         <div class="form-group">
             <label for="blogName">部落格名稱</label>
@@ -45,7 +41,7 @@ import { Store } from "vuex";
 import { IState } from "~/store/index";
 import { IUserClient, IBlogClient } from "~/interfaces/basic";
 
-interface Data {
+interface IData {
     blogCoverUrl: string | null
     formData: {
         blogName: string | null,
@@ -58,6 +54,10 @@ interface Data {
 
     layout: "admin",
 
+    components: {
+        ImageInputer: () => import("~/components/UIWidgets/ImageInputer.vue"),
+    },
+
     validations: {
 		formData: {
 			blogName: { required }
@@ -65,13 +65,13 @@ interface Data {
 	}
 })
 export default class AdminBlog extends mixins(validationMixin) {
-    blogCoverUrl: Data["blogCoverUrl"] = null
-    formData: Data["formData"] = {
+    blogCoverUrl: IData["blogCoverUrl"] = null
+    formData: IData["formData"] = {
         blogName: null,
         blogIntro: null
     }
 
-    asyncData(context: Context): Data | void{
+    asyncData(context: Context): IData | void {
         const store: Store<IState> = context.store;
         const blog = store.state.blog;
 
@@ -87,27 +87,15 @@ export default class AdminBlog extends mixins(validationMixin) {
         }
     }
 
-    changeBlogCover(){
-        const fileSelector = this.$refs.fileSelector;
-        if(fileSelector instanceof HTMLElement){
-            fileSelector.click();
-        }
-    }
-
-    async fileSelected(e: any): Promise<void>{
-        const blogCover = e.target.files[0];
+    async fileSelected(blogCover: Blob): Promise<void> {
         const formData = new FormData();
-        const img = this.$refs.blogCover;
-
         formData.append("cover", blogCover);
+
         try {
             const { blog } = await this.$axios.$post("/api/blogs/cover", formData);
             this.$store.commit("SET_BLOG", blog);
 
-            if(img instanceof HTMLImageElement){
-                img.src = blog.coverUrl;
-                this.$swal("更新成功", "", "success");
-            }
+            this.$swal("更新成功", "", "success");
         } catch(e){
             console.log(e.response);
             this.$swal("更新失敗", "", "error");
@@ -115,7 +103,7 @@ export default class AdminBlog extends mixins(validationMixin) {
         
     }
 
-    async save(): Promise<void>{
+    async save(): Promise<void> {
         if(this.formInvalid()) return;
 
         const updates = this.formData;

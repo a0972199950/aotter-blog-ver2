@@ -12,6 +12,14 @@ export interface IPostDocument extends IPost, Document {
 }
 
 const createSchemaDefinition = (): SchemaDefinition => {
+    const cover: SchemaTypeOpts<any> = {
+        type: Buffer
+    };
+
+    const coverUrl: SchemaTypeOpts<any> = {
+        type: String
+    };
+
     const title: SchemaTypeOpts<any> = {
         type: String,
         required: true
@@ -36,22 +44,23 @@ const createSchemaDefinition = (): SchemaDefinition => {
     };
 
     const author: SchemaTypeOpts<any> = {
-        type: String,
+        type: Schema.Types.ObjectId,
         required: true,
         ref: "User"
     };
 
     const belongToBlog: SchemaTypeOpts<any> = {
-        type: String,
+        type: Schema.Types.ObjectId,
         required: true,
         ref: "Blog"
     }
 
-    return { title, content, text, views, publish, author, belongToBlog };
+    return { cover, coverUrl, title, content, text, views, publish, author, belongToBlog };
 };
 
 const createSchemaOptions = (): SchemaOptions => ({
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true }
 });
 
 const PostSchema: Schema = new Schema(createSchemaDefinition(), createSchemaOptions());
@@ -61,6 +70,15 @@ PostSchema.virtual("comments", {
     localField: "_id",
     foreignField: "belongToPost"
 });
+
+PostSchema.methods.toJSON = function () {
+    const post = this;
+    const postPureObj = post.toObject();
+
+    delete postPureObj.cover;
+
+    return postPureObj;
+};
 
 
 export default PostSchema;

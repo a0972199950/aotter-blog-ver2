@@ -12,6 +12,12 @@
             
             <hr>
             <div ref="content"></div>
+
+            <hr class="mt-5">
+            <CommentForm @save="createComment" />
+
+            <hr class="mt-5">
+            <Comments :comments="comments" />
         </div>
     </section>
 </template>
@@ -20,42 +26,59 @@
 import { Component, Vue } from "nuxt-property-decorator";
 import { Context } from "@nuxt/types";
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
-import { IPostClient } from "~/interfaces/basic";
+import { IPostClient, ICommentClient } from "~/interfaces/basic";
 
-interface Data {
+interface IData {
     post: IPostClient | null
+    comments: ICommentClient[]
 }
 
 @Component({
-    layout: "blog"
+    layout: "blog",
+    components: {
+        Comments: () => import("~/components/Comments.vue"),
+        CommentForm: () => import("~/components/forms/CommentForm.vue")
+    }
 })
 export default class Post_postId extends Vue {
-    post: Data["post"] = null;
+    post: IData["post"] = null
 
-    get postContentHTML(): string{
+    comments: IData["comments"] = []
+
+    get postContentHTML(): string {
         if(!this.post) return "";
         return new QuillDeltaToHtmlConverter(this.post.content).convert();
     }
 
-    async asyncData(context: Context): Promise<Data | void>{
+    async asyncData(context: Context): Promise<IData | void> {
         const { app, params, redirect } = context;
         const postId = params.postId;
-        console.log(postId);
 
         try {
-            const { post }: { post: Data["post"] } = await app.$axios.$get(`/api/posts/${postId}`);
-            if(!post) return redirect("/blogs");
-
-            return { post };
+            const { post, comments }: { post: IData["post"], comments: IData["comments"] } = await app.$axios.$get(`/api/posts/${postId}`);
+            return { post, comments };
         } catch(e){
             console.log(e);
+            redirect("/blogs");
         }
     }
 
-    mounted(){
+    mounted(): void {
         const contentDiv = this.$refs.content;
         if(contentDiv instanceof Element){
             contentDiv.innerHTML = this.postContentHTML;
+        }
+    }
+
+    async createComment(text: string): Promise<void> {
+        const postId = this.post!._id;
+
+        try {
+            await this.$axios.$post(`/api/comments/post/${postId}`, { text });
+            this.$router.go(0);
+        } catch(e) {
+            console.log(e);
+            this.$swal("留言失敗", e.response.data.message, "error");
         }
     }
 }

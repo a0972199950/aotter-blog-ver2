@@ -22,7 +22,7 @@
                                 <nuxt-link :to="`/posts/${post._id}`">
                                     <div class="card rounded-0 post">
                                         <div class="card-header p-0">
-                                            <img src="https://picsum.photos/300/200">
+                                            <img :src="post.coverUrl">
                                         </div>
                                         <div class="card-body pb-2">
                                             <h5 class="card-title mb-3">{{ post.title }}</h5>
@@ -59,7 +59,7 @@ import { Component, Vue } from "nuxt-property-decorator";
 import { Context } from "@nuxt/types";
 import { IPostClient, IBlogClient, IAuthor } from "~/interfaces/basic";
 
-interface Data {
+interface IData {
     blog: IBlogClient | null
     author: IAuthor | null
     posts: IPostClient[] | []
@@ -68,15 +68,15 @@ interface Data {
 @Component({
     layout: "blog",
     components: {
-        AuthorCard: () => import("~/components/UIWidgets/AuthorCard.vue")
+        AuthorCard: () => import("~/components/AuthorCard.vue")
     }
 })
 export default class Blogs_blogId extends Vue {
-    blog: Data["blog"] = null
-    author: Data["author"] = null
-    posts: Data["posts"] = []
+    blog: IData["blog"] = null
+    author: IData["author"] = null
+    posts: IData["posts"] = []
 
-    async asyncData(context: Context): Promise<Data | void>{
+    async asyncData(context: Context): Promise<IData | void> {
         const { app, params } = context;
         const blogId: string = params.blogId;
 

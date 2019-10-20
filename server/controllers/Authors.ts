@@ -9,7 +9,12 @@ class AuthorsController {
         try {
             const users: IUserDocument[] | [] = await User
                 .find({})
-                .populate({ path: "blog" })
+                .populate({ 
+                    path: "blog",
+                    match: {
+                        publish: true
+                    }
+                })
                 .exec();
             const authors = users.map(user => (user.mapUserToAuthor()));
 

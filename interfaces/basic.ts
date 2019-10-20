@@ -33,7 +33,7 @@ export interface IUser extends IDocument {
         instagram: string
     }
     tokens: string[]
-    blog: string | IBlog
+    blog: IBlog["_id"] | IBlog
     posts: IPost[]
     comments: IComment[]
 }
@@ -43,25 +43,28 @@ export interface IBlog extends IDocument{
     coverUrl: string
     name: string
     intro: string
-    author: string | IUser
+    publish: boolean
+    author: IUser["_id"] | IUser
     posts: IPost[]
 }
 
 export interface IPost extends IDocument {
+    cover: Buffer
+    coverUrl: string
     title: string
     content: DeltaOperation[]
     text: string
     views: number
     publish: boolean
-    author: string | IUser
-    belongToBlog: string | IBlog
+    author: IUser["_id"] | IUser
+    belongToBlog: IBlog["_id"] | IBlog
     comments: IComment[]
 }
 
 export interface IComment extends IDocument {
     text: string
-    author: IUser
-    belongToPost: IPost
+    author: IUser["_id"] | IUser
+    belongToPost: IPost["_id"] | IPost
 }
 
 export interface IAuthor {
@@ -87,10 +90,12 @@ export interface IBlogClient extends IDocument {
     coverUrl: IBlog["coverUrl"]
     name: IBlog["name"]
     intro: IBlog["intro"]
+    publish: boolean
     author: string
 }
 
 export interface IPostClient extends IDocument {
+    coverUrl: IPost["coverUrl"]
     title: IPost["title"]
     content: IPost["content"]
     text: IPost["text"]
@@ -102,6 +107,6 @@ export interface IPostClient extends IDocument {
 
 export interface ICommentClient extends IDocument {
     text: IComment["text"]
-    avatar: IUser["avatarUrl"]
+    avatarUrl: IUser["avatarUrl"]
     name: IUser["name"]
 }

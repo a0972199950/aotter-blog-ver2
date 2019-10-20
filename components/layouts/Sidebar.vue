@@ -19,7 +19,7 @@
                 to="/admin/posts"
                 class="list-group-item list-group-item-action"
                 :class="{ active: $route.path.match(/^\/admin\/posts/) }">
-                文章編輯
+                文章列表
             </nuxt-link>
         </div>
     </section>

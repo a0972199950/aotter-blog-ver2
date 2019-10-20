@@ -49,7 +49,7 @@ export const actions: ActionTree<IState, IState> = {
 
 		try {
 			const { user }: { user: IUserClient } = await app.$axios.$get("/api/users/profile");
-			const { blog }: { blog: IBlogClient } = await app.$axios.$get(`/api/blogs/${user.blog}`);
+			const { blog }: { blog: IBlogClient } = await app.$axios.$get(`/api/blogs/me`);
 			vuexContext.commit("SET_USER", user);
 			vuexContext.commit("SET_BLOG", blog);
 		} catch(e){
