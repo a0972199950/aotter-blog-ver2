@@ -46,7 +46,7 @@ class Auth{
         }
 
         try {
-            const encodedToken = jwt.verify<any>(token, process.env.JWT_SECRET_KEY!);
+            const encodedToken: any = jwt.verify(token, process.env.JWT_SECRET_KEY!);
 
             if(typeof encodedToken === "string") throw new Error();
             const userId: string = encodedToken._id;
