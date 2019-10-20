@@ -3,7 +3,7 @@ import swal from "sweetalert";
 
 declare module "vue/types/vue" {
     interface Vue {
-        $swal: typeof swal
+        $swal: any
     }
 }
 
