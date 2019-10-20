@@ -17,6 +17,8 @@ https://qiita.com/sauzar18/items/d68c13f200b3bc671679
 # install dependencies
 $ npm run install
 
+# connect to your local mongo database through port 27017
+
 # serve with hot reload at localhost:3000
 $ npm run dev
 
