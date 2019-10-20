@@ -9,13 +9,12 @@ import {
 import validator from "validator";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import { IUser, IAuthor } from "../../interfaces/basic";
+import { IUser } from "../../interfaces/basic";
 
 
 export interface IUserDocument extends IUser, Document{
     // 定義實例方法接口
     generateToken: () => Promise<string | void>
-    mapUserToAuthor: () => IAuthor
 }
 
 const createSchemaDefinition = (): SchemaDefinition => {
@@ -105,19 +104,6 @@ UserSchema.methods.generateToken = async function(): Promise<string | void>{
         return token;
     } catch(e){
         return;
-    };
-};
-
-UserSchema.methods.mapUserToAuthor = function(): IAuthor {
-    const user = this;
-
-    return { 
-        _id: user.blog._id,
-        avatarUrl: user.avatarUrl,
-        blogName: user.blog.name,
-        name: user.name,
-        blogIntro: user.blog.intro,
-        socialMedias: user.socialMedias
     };
 };
 

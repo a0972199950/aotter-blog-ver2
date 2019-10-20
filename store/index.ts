@@ -60,7 +60,7 @@ export const actions: ActionTree<IState, IState> = {
 	async signup(vuexContext: ActionContext<IState, IState>, signupData: ISignupData): Promise<boolean> {
 		try {
 			const { user }: { user: IUserClient } = await this.$axios.$post("/api/users", signupData);
-			const { blog }: { blog: IBlogClient } = await this.$axios.$get(`/api/blogs/${user.blog}`);
+			const { blog }: { blog: IBlogClient } = await this.$axios.$get(`/api/blogs/me`);
 			vuexContext.commit("SET_USER", user);
 			vuexContext.commit("SET_BLOG", blog);
 			return true;
@@ -73,7 +73,7 @@ export const actions: ActionTree<IState, IState> = {
 	async login(vuexContext: ActionContext<IState, IState>, loginData: ILoginData): Promise<void | Error> {
 		try {
 			const { user }: { user: IUserClient } = await this.$axios.$post("/api/users/login", loginData);
-			const { blog }: { blog: IBlogClient } = await this.$axios.$get(`/api/blogs/${user.blog}`);
+			const { blog }: { blog: IBlogClient } = await this.$axios.$get(`/api/blogs/me`);
 			vuexContext.commit("SET_USER", user);
 			vuexContext.commit("SET_BLOG", blog);
 		} catch(e){

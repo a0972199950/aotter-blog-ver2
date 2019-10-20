@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="col-md-3 order-1 order-md-2">
-                    <AuthorCard :author="author" />
+                    <AuthorCard :blog="blog" />
                 </div>
             </div>
         </div>
@@ -57,11 +57,10 @@
 <script lang="ts">
 import { Component, Vue } from "nuxt-property-decorator";
 import { Context } from "@nuxt/types";
-import { IPostClient, IBlogClient, IAuthor } from "~/interfaces/basic";
+import { IPostClient, IBlogClient } from "~/interfaces/basic";
 
 interface IData {
     blog: IBlogClient | null
-    author: IAuthor | null
     posts: IPostClient[] | []
 }
 
@@ -73,7 +72,6 @@ interface IData {
 })
 export default class Blogs_blogId extends Vue {
     blog: IData["blog"] = null
-    author: IData["author"] = null
     posts: IData["posts"] = []
 
     async asyncData(context: Context): Promise<IData | void> {
@@ -82,9 +80,8 @@ export default class Blogs_blogId extends Vue {
 
         try {
             const { blog }: { blog: IBlogClient } = await app.$axios.$get(`/api/blogs/${blogId}`);
-            const { author }: { author: IAuthor } = await app.$axios.$get(`/api/authors/${blog.author}`);
             const { posts }: { posts: IPostClient[] } = await app.$axios.$get(`/api/posts/blog/${blogId}`);
-            return { blog, author, posts };
+            return { blog, posts };
         } catch(e){
             console.log(e.response);
         }

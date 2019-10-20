@@ -1,8 +1,8 @@
 <template>
     <section class="container mt-3">
         <div class="row">
-            <div v-for="(author, index) in authors" :key="index" class="col-md-4">
-                <AuthorCard :author="author" />
+            <div v-for="(blog, index) in blogs" :key="index" class="col-md-4">
+                <AuthorCard :blog="blog" />
             </div>
         </div>
     </section>
@@ -12,10 +12,10 @@
 <script lang="ts">
 import { Component, Vue } from "nuxt-property-decorator";
 import { Context } from "@nuxt/types";
-import { IAuthor } from "~/interfaces/basic";
+import { IBlogClient } from "~/interfaces/basic";
 
 interface IData {
-    authors: IAuthor[]
+    blogs: IBlogClient[]
 }
 
 @Component({
@@ -24,14 +24,14 @@ interface IData {
     }
 })
 export default class Blogs extends Vue {
-    authors: IData["authors"] = []
+    blogs: IData["blogs"] = []
 
     async asyncData(context: Context): Promise<IData | void> {
         const { app } = context;
 
         try {
-            let { authors }: { authors: IAuthor[] } = await app.$axios.$get("/api/authors");
-            return { authors }
+            let { blogs }: { blogs: IBlogClient[] } = await app.$axios.$get("/api/blogs");
+            return { blogs }
         } catch(e){
             console.log(e.response);
         }

@@ -48,6 +48,15 @@ export interface IBlog extends IDocument{
     posts: IPost[]
 }
 
+// export interface IAuthor {
+//     _id: IBlog["_id"]
+//     avatarUrl: IUser["avatarUrl"]
+//     blogName: IBlog["name"]
+//     name: IUser["name"]
+//     blogIntro: IBlog["intro"]
+//     socialMedias: IUser["socialMedias"]
+// }
+
 export interface IPost extends IDocument {
     cover: Buffer
     coverUrl: string
@@ -67,14 +76,7 @@ export interface IComment extends IDocument {
     belongToPost: IPost["_id"] | IPost
 }
 
-export interface IAuthor {
-    _id: IBlog["_id"]
-    avatarUrl: IUser["avatarUrl"]
-    blogName: IBlog["name"]
-    name: IUser["name"]
-    blogIntro: IBlog["intro"]
-    socialMedias: IUser["socialMedias"]
-}
+
 
 export interface IUserClient extends IDocument {
     email: IUser["email"]
@@ -91,7 +93,11 @@ export interface IBlogClient extends IDocument {
     name: IBlog["name"]
     intro: IBlog["intro"]
     publish: boolean
-    author: string
+    author: {
+        avatarUrl: IUser["avatarUrl"]
+        name: IUser["name"]
+        socialMedias: IUser["socialMedias"]
+    }
 }
 
 export interface IPostClient extends IDocument {

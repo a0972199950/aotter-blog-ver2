@@ -1,31 +1,31 @@
 <template>
     <div class="card text-center mb-5 mt-5 mb-md-0">
         <div class="avatar">
-            <img :src="author.avatarUrl">
+            <img :src="blog.author.avatarUrl">
         </div>
         
         <div class="card-body pb-0">
-            <nuxt-link :to="`/blogs/${author._id}`">
-                <h3 class="blog-name">{{ author.blogName }}</h3>
-                <h5 class="name">{{ author.name || "匿名" }}</h5>
-                <p>{{ author.blogIntro }}</p>
+            <nuxt-link :to="`/blogs/${blog.author._id}`">
+                <h3 class="blog-name">{{ blog.name }}</h3>
+                <h5 class="name">{{ blog.author.name || "匿名" }}</h5>
+                <p>{{ blog.intro }}</p>
             </nuxt-link>
 
             <div class="d-flex justify-content-center">
-                <div v-if="author.socialMedias.facebook" class="p-3">
-                    <a :href="author.socialMedias.facebook" target="blank">
+                <div v-if="blog.author.socialMedias.facebook" class="p-3">
+                    <a :href="blog.author.socialMedias.facebook" target="blank">
                         <font-awesome-icon :icon="['fab', 'facebook']" />
                     </a>
                 </div>
 
-                <div v-if="author.socialMedias.twitter" class="p-3">
-                    <a :href="author.socialMedias.twitter" target="blank">
+                <div v-if="blog.author.socialMedias.twitter" class="p-3">
+                    <a :href="blog.author.socialMedias.twitter" target="blank">
                         <font-awesome-icon :icon="['fab', 'twitter']" />
                     </a>
                 </div>
 
-                <div v-if="author.socialMedias.instagram" class="p-3">
-                    <a :href="author.socialMedias.instagram" target="blank">
+                <div v-if="blog.author.socialMedias.instagram" class="p-3">
+                    <a :href="blog.author.socialMedias.instagram" target="blank">
                         <font-awesome-icon :icon="['fab', 'instagram']" />
                     </a>
                 </div>
@@ -36,12 +36,16 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "nuxt-property-decorator";
-import { IAuthor } from "~/interfaces/basic";
+import { IBlogClient } from "~/interfaces/basic";
+
+interface IProp {
+    blog: IBlogClient
+}
 
 @Component
 export default class UIWidgetsAuthorCard extends Vue {
     @Prop({ type: Object, default: {} })
-    readonly author: any
+    readonly blog: IProp["blog"]
 }
 </script>
 

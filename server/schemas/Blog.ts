@@ -5,7 +5,7 @@ import {
     SchemaOptions, 
     SchemaTypeOpts
 } from "mongoose";
-import { IBlog } from "../../interfaces/basic";
+import { IBlog, IBlogClient } from "../../interfaces/basic";
 
 
 export interface IBlogDocument extends IBlog, Document {
@@ -51,6 +51,12 @@ const createSchemaOptions = (): SchemaOptions => ({
 
 const BlogSchema: Schema = new Schema(createSchemaDefinition(), createSchemaOptions());
 
+BlogSchema.virtual("posts", {
+    ref: "Post",
+    localField: "_id",
+    foreignField: "belongToBlog"
+});
+
 BlogSchema.methods.toJSON = function () {
     const blog = this;
     const blogPureObj = blog.toObject();
@@ -60,10 +66,6 @@ BlogSchema.methods.toJSON = function () {
     return blogPureObj;
 };
 
-BlogSchema.virtual("posts", {
-    ref: "Post",
-    localField: "_id",
-    foreignField: "belongToBlog"
-});
+
 
 export default BlogSchema

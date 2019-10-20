@@ -8,22 +8,28 @@ import { IReqThroughMiddleware } from "../../interfaces/basic";
 
 
 class BlogsController {
-    // 讀取全部部落格資料
-    public async fetchAll(req: Request, res: Response): Promise<Response | void> {
+    // 讀取自己的部落格資料
+    public async fetchMe(req: IReqThroughMiddleware, res: Response): Promise<Response | void> {
+        const blogId = req.user!.blog;
+
         try {
-            const blogs: IBlogDocument[] | [] = await Blog.find({ publish: true });
-            res.json({ blogs });
+            const blog = Blog
+                .findById(blogId)
+                .populate({
+                    path: "author",
+                    select: "avatarUrl, name, socialMedias"
+                })
+                .exec();
+
+            res.json({ blog });
         } catch(e){
             res.status(500).json({ message: e.message });
-        }
+        };
     }
 
-    // 更新單一部落格資料
-    public async update(req: IReqThroughMiddleware, res: Response): Promise<Response | void> {
-        const user = req.user;
-        if(!user) return res.status(403).json({ message: "請先登入" });
-
-        const blogId = user.blog;
+    // 更新自己的部落格資料
+    public async updateMe(req: IReqThroughMiddleware, res: Response): Promise<Response | void> {
+        const blogId = req.user!.blog;
         const updates = {
             name: req.body.blogName,
             intro: req.body.blogIntro,
@@ -38,47 +44,21 @@ class BlogsController {
         }
     }
 
-    // 讀取自己的部落格資料
-    public async fetchMe(req: IReqThroughMiddleware, res: Response): Promise<Response | void> {
-        const user = req.user!;
-
-        try {
-            await user.populate("blog").execPopulate();
-            res.json({ blog: user.blog });
-        } catch(e){
-            res.status(500).json({ message: e.message });
-        };
-    }
-
-    // 讀取任一部落格資料
-    public async fetch(req: Request, res: Response): Promise<Response | void> {
-        const blogId: string = req.params.blogId;
-
-        try {
-            const blog: IBlogDocument | null = await Blog.findOne({ _id: blogId, publish: true });
-            if(!blog) return res.status(404).json({ message: "找不到部落格" });
-            res.json({ blog });
-        } catch(e){
-            res.status(500).json({ message: e.message });
-        }
-    }
-
-    // 上傳部落格封面照片
+    // 上傳自己的部落格封面照片
     public async uploadCover(req: IReqThroughMiddleware, res: Response): Promise<Response | void> {
-        const user = req.user;
-
-        const blogId = user!.blog;
-        let blog = await Blog.findById(blogId);
-        if(!blog) return res.status(404).json({ message: "部落格不存在" });
-
-        const originCover = req.file.buffer;
-        const formattedCover = await sharp(originCover).resize(1200, 500).jpeg().toBuffer();
-        blog = Object.assign(blog, { 
-            cover: formattedCover,
-            coverUrl: `/api/blogs/cover/${blogId}?${new Date().valueOf()}`
-        });
-
+        const blogId = req.user!.blog;
+        
         try {
+            let blog = await Blog.findById(blogId);
+            if(!blog) return res.status(404).json({ message: "部落格不存在" });
+
+            const originCover = req.file.buffer;
+            const formattedCover = await sharp(originCover).resize(1200, 500).jpeg().toBuffer();
+            blog = Object.assign(blog, { 
+                cover: formattedCover,
+                coverUrl: `/api/blogs/cover/${blogId}?${new Date().valueOf()}`
+            });
+        
             await blog.save();
             res.json({ blog });
         } catch(e){
@@ -86,8 +66,45 @@ class BlogsController {
         }
     }
 
-    // 讀取部落格封面照片
-    public async fetchCover(req: Request, res: Response): Promise<Response | void> {
+    // 讀取全部部落格資料
+    public async fetchAll(req: Request, res: Response): Promise<Response | void> {
+        try {
+            const blogs: IBlogDocument[] | [] = await Blog
+                .find({ publish: true })
+                .populate({
+                    path: "author",
+                    select: "avatarUrl, name, socialMedias"
+                })
+                .exec();
+
+            res.json({ blogs });
+        } catch(e){
+            res.status(500).json({ message: e.message });
+        }
+    }
+
+    // 讀取任一部落格資料
+    public async fetchAny(req: Request, res: Response): Promise<Response | void> {
+        const blogId = req.params.blogId;
+
+        try {
+            const blog: IBlogDocument | null = await Blog
+                .findOne({ _id: blogId, publish: true })
+                .populate({
+                    path: "author",
+                    select: "avatarUrl, name, socialMedias"
+                })
+                .exec();
+            if(!blog) return res.status(404).json({ message: "找不到部落格" });
+
+            res.json({ blog });
+        } catch(e){
+            res.status(500).json({ message: e.message });
+        }
+    }
+
+    // 讀取任一部落格封面照片
+    public async fetchAnyCover(req: Request, res: Response): Promise<Response | void> {
         const blogId: string = req.params.blogId;
 
         try {
@@ -95,7 +112,6 @@ class BlogsController {
                 .findById(blogId)
                 .select("cover")
                 .exec();
-
             if(!blog) return res.status(404).json({ error: "部落格不存在" });
 
             const cover = blog.cover || fs.readFileSync(path.join(__dirname, "../../static/image/blogCover-default.jpg"));
