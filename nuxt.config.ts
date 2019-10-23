@@ -64,11 +64,6 @@ const config: Configuration = {
     'bootstrap-vue/nuxt',
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    ['nuxt-env', {
-      keys: [
-        { key: 'ENV_VAR', default: 'hello world' }
-      ]
-    }],
     '~/modules/api'
   ],
   typescript: {
@@ -96,6 +91,7 @@ const config: Configuration = {
   // ]
   server: {
     port: process.env.PORT || 3000, // default: 3000
+    host: process.env.HOST || "localhost", // default: 'localhost'
   },
 }
 
