@@ -1,5 +1,8 @@
 import { Configuration } from '@nuxt/types';
 
+console.log("HOST: " + process.env.HOST);
+console.log("PORT: " + process.env.PORT);
+
 const config: Configuration = {
   mode: 'universal',
   /*
@@ -74,7 +77,9 @@ const config: Configuration = {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {},
+  axios: {
+    baseURL: `http://${process.env.HOST}:${process.env.PORT}`
+  },
   /*
    ** Build configuration
    */
