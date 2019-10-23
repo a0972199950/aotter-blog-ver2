@@ -37,6 +37,12 @@ export default class Header extends Vue {
         return this.$store.state.user;
     }
 
+    mounted(){
+        console.log("MONGOOSE_DATABASE_URL: " + process.env.MONGOOSE_DATABASE_URL);
+        console.log("COOKIE_SIGN_KEY: " + process.env.COOKIE_SIGN_KEY);
+        console.log("JWT_SECRET_KEY: " + process.env.JWT_SECRET_KEY);
+    }
+
     async logout(): Promise<void> {
         try {
             await this.$store.dispatch("logout");
