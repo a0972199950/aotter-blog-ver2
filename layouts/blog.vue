@@ -1,6 +1,5 @@
 <template>
     <section id="layout">
-        <div id="bg"></div>
         <Header />
         <nuxt />
     </section>

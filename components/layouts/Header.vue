@@ -42,7 +42,7 @@ export default class Header extends Vue {
             await this.$store.dispatch("logout");
             this.$router.push("/blogs");
         } catch (e) {
-			this.$swal("登出失敗", e.message, "error");
+			this.$swal.fire("登出失敗", e.message, "error");
         }
     }
 
@@ -51,7 +51,7 @@ export default class Header extends Vue {
             await this.$store.dispatch("logoutAll");
             this.$router.push("/blogs");
         } catch (e) {
-			this.$swal("登出失敗", e.message, "error");
+			this.$swal.fire("登出失敗", e.message, "error");
         }
     }
 }

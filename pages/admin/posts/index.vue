@@ -84,16 +84,22 @@ export default class AdminPosts extends Vue {
         
     }
 
-    async remove(postId: string): Promise<void> {
-        if(confirm("確定要刪除嗎？")){
-            try {
-                await this.$axios.delete(`/api/posts/me/${postId}`);
-                this.$router.go(0);
-            } catch(e){
-                console.log(e);
-                this.$swal("刪除失敗", e.response.data.message, "error");
-            }
-        }
+    remove(postId: string): void {
+        this.$swal.fire({
+            title: "確定要刪除嗎",
+            type: "warning",
+            showCancelButton: true,
+        }).then(async confirm => {
+            if(confirm.value) {
+                try {
+                    await this.$axios.delete(`/api/posts/me/${postId}`);
+                    this.$router.go(0);
+                } catch(e){
+                    console.log(e);
+                    this.$swal.fire("刪除失敗", e.response.data.message, "error");
+                }
+            };
+        });
     }
 
     async postPublishChange(publish: boolean, postId: string): Promise<void> {
@@ -101,7 +107,7 @@ export default class AdminPosts extends Vue {
             await this.$axios.patch(`/api/posts/me/${postId}`, { publish });
         } catch(e){
             console.log(e);
-            this.$swal("修改失敗", e.response.data.message, "error");
+            this.$swal.fire("修改失敗", e.response.data.message, "error");
         }
     }
 }

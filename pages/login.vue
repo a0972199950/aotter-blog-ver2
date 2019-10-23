@@ -86,7 +86,7 @@ export default class Index extends mixins(validationMixin) {
 				this.$router.push(redirectUrl);
 			}
 		} catch(e){
-			this.$swal("登入失敗", e.message, "error");
+			this.$swal.fire("登入失敗", e.message, "error");
 		}
 	}
 

@@ -78,7 +78,7 @@ export default class Post_postId extends Vue {
             this.$router.go(0);
         } catch(e) {
             console.log(e);
-            this.$swal("留言失敗", e.response.data.message, "error");
+            this.$swal.fire("留言失敗", e.response.data.message, "error");
         }
     }
 }

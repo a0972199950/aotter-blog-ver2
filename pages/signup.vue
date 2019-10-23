@@ -101,7 +101,7 @@ export default class Signup extends mixins(validationMixin) {
 				this.$router.push(redirectUrl);
 			}
 		} catch(e){
-			this.$swal("註冊失敗", e.message, "error");
+			this.$swal.fire("註冊失敗", e.message, "error");
 		}
 	}
 

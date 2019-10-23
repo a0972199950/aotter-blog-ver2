@@ -55,7 +55,7 @@ export default class ImageInputer extends Vue {
         if(!image) return;
         
         if(!image.type.match(/^image\//)) {
-            this.$swal("預覽失敗", "請選擇圖片檔案", "error");
+            this.$swal.fire("預覽失敗", "請選擇圖片檔案", "error");
             return;
         }
 

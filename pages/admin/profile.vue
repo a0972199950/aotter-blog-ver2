@@ -89,9 +89,10 @@ export default class AdminProfile extends Vue {
             const { user } = await this.$axios.$post("/api/users/avatar", formData);
             this.$store.commit("SET_USER", user);
 
-            this.$swal("更新成功", "", "success");
+            this.$swal.fire("更新成功", "", "success");
         } catch(e){
-            this.$swal("更新失敗", "", "error");
+            console.log(e.response);
+            this.$swal.fire("更新失敗", "", "error");
         }
         
     }
@@ -102,9 +103,10 @@ export default class AdminProfile extends Vue {
         try {
             const { user }: { user: IUserClient } = await this.$axios.$patch(`/api/users/profile`, updates);
             this.$store.commit("SET_USER", user);
-            this.$swal("更新成功", "", "success");
+            this.$swal.fire("更新成功", "", "success");
         } catch(e){
             console.log(e.response);
+            this.$swal.fire("更新失敗", "", "error");
         }
     }
 }

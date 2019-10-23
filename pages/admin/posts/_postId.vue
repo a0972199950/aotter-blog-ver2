@@ -74,11 +74,11 @@ export default class AdminPosts_postId extends Vue {
                 const result = await this.uploadCover();
                 if(!result) throw new Error("圖片上傳失敗");
             }
-            this.$swal("修改成功", "", "success");
+            this.$swal.fire("修改成功", "", "success");
             this.$router.push("/admin/posts");
         } catch(e){
             console.log(e);
-            this.$swal("修改失敗", e, "error");
+            this.$swal.fire("修改失敗", e, "error");
         }
     }
 
@@ -95,12 +95,13 @@ export default class AdminPosts_postId extends Vue {
     }
 
     cancel(): void {
-        this.$swal({
+        this.$swal.fire({
             title: "確定要退出嗎？",
             text: "未完成內容將不會保留",
-            icon: "warning"
-        }).then((confirm) => {
-            if(confirm){
+            type: "warning",
+            showCancelButton: true,
+        }).then(confirm => {
+            if(confirm.value){
                 this.$router.push("/admin/posts");
             }
         });

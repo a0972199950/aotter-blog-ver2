@@ -111,10 +111,10 @@ export default class AdminBlog extends mixins(validationMixin) {
             const { blog } = await this.$axios.$post("/api/blogs/me/cover", formData);
             this.$store.commit("SET_BLOG", blog);
 
-            this.$swal("更新成功", "", "success");
+            this.$swal.fire("更新成功", "", "success");
         } catch(e){
             console.log(e.response);
-            this.$swal("更新失敗", "", "error");
+            this.$swal.fire("更新失敗", "", "error");
         }
         
     }
@@ -127,10 +127,10 @@ export default class AdminBlog extends mixins(validationMixin) {
         try {
             const { blog }: { blog: IBlogClient } = await this.$axios.$patch(`/api/blogs/me`, updates);
             this.$store.commit("SET_BLOG", blog);
-            this.$swal("更新成功", "", "success");
+            this.$swal.fire("更新成功", "", "success");
         } catch(e){
             console.log(e.response);
-            this.$swal("更新失敗", "", "error");
+            this.$swal.fire("更新失敗", "", "error");
         }
     }
 

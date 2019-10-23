@@ -53,7 +53,7 @@ export const actions: ActionTree<IState, IState> = {
 			vuexContext.commit("SET_USER", user);
 			vuexContext.commit("SET_BLOG", blog);
 		} catch(e){
-			console.log(e.response.data.message);
+			console.log(e.response);
 		}
 	},
 

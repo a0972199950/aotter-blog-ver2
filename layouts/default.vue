@@ -38,7 +38,7 @@ export default class AdminLayout extends Vue{
     z-index: -1;
     width: 100vw;
     min-height: 100vh;
-    background: linear-gradient( rgba(30, 30, 30, 0.6), rgba(30, 30, 30, 0.6) ), url("/api/static/image/blogCover-default.jpg");
+    background: linear-gradient( rgba(30, 30, 30, 0.6), rgba(30, 30, 30, 0.6) ), url("/api/static/image/blogBg.jpg");
     background-size: cover;
     background-position: center center;
 }
