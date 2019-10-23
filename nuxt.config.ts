@@ -72,7 +72,8 @@ const config: Configuration = {
       keys: [
         { key: 'ENV_VAR', default: 'hello world' }
       ]
-    }]
+    }],
+    '~/modules/api'
   ],
   /*
    ** Axios module configuration
@@ -90,9 +91,9 @@ const config: Configuration = {
     },
 
   },
-  serverMiddleware: [
-    { path: "/api", handler: "~/server/index.ts" }
-  ]
+  // serverMiddleware: [
+  //   { path: "/api", handler: "~/server/index.ts" }
+  // ]
 }
 
 export default config;

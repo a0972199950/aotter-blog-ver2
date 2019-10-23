@@ -13,4 +13,4 @@ app.use(cookieParser(process.env.COOKIE_SIGN_KEY));
 app.use("/", router);
 
 
-export default app;
+export default { path: '/api', handler: app };
