@@ -7,8 +7,8 @@
   "scripts": {
     "connect": "mongod --dbpath C:/Users/a0972/mongodb_data",
     "dev": "env-cmd -f ./config/dev.env nuxt-ts",
-    "build": "env-cmd -f ./config/dev.env nuxt-ts build",
-    "start": "env-cmd -f ./config/prod.env nuxt-ts start",
+    "build": "nuxt-ts build",
+    "start": "nuxt-ts start",
     "generate": "nuxt-ts generate"
   },
   "dependencies": {
