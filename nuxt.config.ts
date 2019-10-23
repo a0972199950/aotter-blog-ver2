@@ -52,10 +52,6 @@ const config: Configuration = {
     "~/plugins/vuelidate",
     { src: "~/plugins/vue-quill-editor", mode: "client" },
   ],
-  typescript: {
-    typeCheck: true,
-    ignoreNotFoundWarnings: true
-  },
   /*
    ** Nuxt.js dev-modules
    */
@@ -75,6 +71,10 @@ const config: Configuration = {
     }],
     '~/modules/api'
   ],
+  typescript: {
+    typeCheck: true,
+    ignoreNotFoundWarnings: true
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
@@ -94,6 +94,9 @@ const config: Configuration = {
   // serverMiddleware: [
   //   { path: "/api", handler: "~/server/index.ts" }
   // ]
+  server: {
+    port: process.env.PORT || 3000, // default: 3000
+  },
 }
 
 export default config;
