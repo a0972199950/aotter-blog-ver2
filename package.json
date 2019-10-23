@@ -9,7 +9,7 @@
     "dev": "env-cmd -f ./config/dev.env nuxt-ts",
     "build": "env-cmd -f ./config/dev.env nuxt-ts build",
     "start": "nuxt-ts start",
-    "generate": "env-cmd -f ./config/dev.env nuxt-ts generate"
+    "generate": "nuxt-ts generate"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
