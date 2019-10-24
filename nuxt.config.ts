@@ -93,10 +93,10 @@ const config: Configuration = {
   // serverMiddleware: [
   //   { path: "/api", handler: "~/server/index.ts" }
   // ]
-  server: {
-    port: process.env.PORT || 3000, // default: 3000
-    host: process.env.HOST || "localhost", // default: 'localhost'
-  },
+  // server: {
+  //   port: process.env.PORT || 3000, // default: 3000
+  //   host: process.env.HOST || "localhost", // default: 'localhost'
+  // },
 }
 
 export default config;
