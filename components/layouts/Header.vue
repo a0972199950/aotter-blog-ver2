@@ -3,6 +3,8 @@
     <b-navbar toggleable="sm" type="dark" variant="primary" class="fixed-top">
       <b-navbar-brand href="/blogs">Aotter Blog</b-navbar-brand>
 
+	  <button @click="testRequest">測試發送get request</button>
+
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
@@ -60,6 +62,15 @@ export default class Header extends Vue {
 			this.$swal.fire("登出失敗", e.message, "error");
         }
     }
+
+	async testRequest(): Promise<void> {
+		try {
+			const res = await this.$axios.get("/api/testRequest");
+			console.log("success", res);
+		} catch(e) {
+			console.log(e);
+		}
+	}
 }
 
 </script>
