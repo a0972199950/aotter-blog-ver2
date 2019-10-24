@@ -2,6 +2,7 @@
   <section>
     <b-navbar toggleable="sm" type="dark" variant="primary" class="fixed-top">
       <b-navbar-brand href="/blogs">Aotter Blog</b-navbar-brand>
+      <button @click="testRequest">測試發送get request</button>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -59,7 +60,17 @@ export default class Header extends Vue {
         } catch (e) {
 			this.$swal.fire("登出失敗", e.message, "error");
         }
-    }
+	}
+	
+	async testRequest(){
+		try {
+			const res = await this.$axios.get("api/testRequest");
+			console.log(res);
+		} catch(e){
+			console.log(e);
+		}
+		
+	}
 }
 
 </script>
