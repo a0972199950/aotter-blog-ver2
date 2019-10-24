@@ -2,6 +2,7 @@
   <section>
     <b-navbar toggleable="sm" type="dark" variant="primary" class="fixed-top">
       <b-navbar-brand href="/blogs">Aotter Blog</b-navbar-brand>
+      <button @click="testRequest">測試發送get request</button>
 
 	  <button @click="testRequest">測試發送get request</button>
 
