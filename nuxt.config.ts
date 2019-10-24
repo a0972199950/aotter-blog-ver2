@@ -78,7 +78,6 @@ const config: Configuration = {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: `http://${process.env.HOST}:${process.env.PORT}`
   },
   /*
    ** Build configuration
