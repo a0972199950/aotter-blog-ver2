@@ -4,8 +4,6 @@
       <b-navbar-brand href="/blogs">Aotter Blog</b-navbar-brand>
       <button @click="testRequest">測試發送get request</button>
 
-	  <button @click="testRequest">測試發送get request</button>
-
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
@@ -65,6 +63,7 @@ export default class Header extends Vue {
     }
 
 	async testRequest(): Promise<void> {
+		console.log(this.$axios.defaults)
 		try {
 			const res = await this.$axios.get("/api/testRequest");
 			console.log("success", res);
