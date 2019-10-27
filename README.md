@@ -1,6 +1,6 @@
-# nuxt-typescript-test
+# aotter-blog-ver2
 
-> My praiseworthy Nuxt.js project
+> A blog built base on nuxt-typescript-express-mongodb
 
 ## Build Setup
 
@@ -18,6 +18,8 @@ https://qiita.com/sauzar18/items/d68c13f200b3bc671679
 $ npm run install
 
 # connect to your local mongo database through port 27017
+# if needed, edit database url in the file "config/dev.env"
+mongod --dbpath YOUR_LODAL_MONGO_DATABASE_URL 
 
 # serve with hot reload at localhost:3000
 $ npm run dev

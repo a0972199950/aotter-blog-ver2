@@ -57,9 +57,9 @@ const createSchemaDefinition = (): SchemaDefinition => {
     };
 
     const socialMedias: SchemaTypeOpts<any> = {
-        facebook: { type: String },
-        twitter: { type: String },
-        instagram: { type: String }
+        facebook: { type: String, default: null },
+        twitter: { type: String, default: null },
+        instagram: { type: String, default: null }
     }
 
     const tokens: SchemaTypeOpts<any>[] = [

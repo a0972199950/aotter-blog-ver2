@@ -36,14 +36,15 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "nuxt-property-decorator";
-import { IBlogClient } from "~/interfaces/basic";
+import { get } from "lodash";
+import { IBlogClient, IUserClient } from "~/interfaces/basic";
 
 interface IProp {
     blog: IBlogClient
 }
 
 @Component
-export default class UIWidgetsAuthorCard extends Vue {
+export default class AuthorCard extends Vue {
     @Prop({ type: Object, default: {} })
     readonly blog!: IProp["blog"]
 }

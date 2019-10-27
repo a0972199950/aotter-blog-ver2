@@ -48,15 +48,6 @@ export interface IBlog extends IDocument{
     posts: IPost[]
 }
 
-// export interface IAuthor {
-//     _id: IBlog["_id"]
-//     avatarUrl: IUser["avatarUrl"]
-//     blogName: IBlog["name"]
-//     name: IUser["name"]
-//     blogIntro: IBlog["intro"]
-//     socialMedias: IUser["socialMedias"]
-// }
-
 export interface IPost extends IDocument {
     cover: Buffer
     coverUrl: string

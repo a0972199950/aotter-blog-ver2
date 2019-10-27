@@ -2,7 +2,6 @@
   <section>
     <b-navbar toggleable="sm" type="dark" variant="primary" class="fixed-top">
       <b-navbar-brand href="/blogs">Aotter Blog</b-navbar-brand>
-      <button @click="testRequest">測試發送get request</button>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -38,12 +37,6 @@ export default class Header extends Vue {
         return this.$store.state.user;
     }
 
-    mounted(){
-        console.log("MONGOOSE_DATABASE_URL: " + process.env.MONGOOSE_DATABASE_URL);
-        console.log("COOKIE_SIGN_KEY: " + process.env.COOKIE_SIGN_KEY);
-        console.log("JWT_SECRET_KEY: " + process.env.JWT_SECRET_KEY);
-    }
-
     async logout(): Promise<void> {
         try {
             await this.$store.dispatch("logout");
@@ -61,16 +54,6 @@ export default class Header extends Vue {
 			this.$swal.fire("登出失敗", e.message, "error");
         }
     }
-
-	async testRequest(): Promise<void> {
-		console.log(this.$axios.defaults)
-		try {
-			const res = await this.$axios.get("/api/testRequest");
-			console.log("success", res);
-		} catch(e) {
-			console.log(e);
-		}
-	}
 }
 
 </script>

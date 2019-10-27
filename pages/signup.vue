@@ -2,7 +2,6 @@
     <section class="d-flex justify-content-center align-items-center">
 		<div class="card">
 			<div class="card-body">
-				<p>{{ $v.$invalid }}</p>
 				<div class="form-group">
 					<label for="email">帳號</label>
 					<input 
