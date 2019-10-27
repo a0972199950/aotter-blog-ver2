@@ -9,8 +9,7 @@
     "dev": "env-cmd -f ./config/dev.env nuxt-ts",
     "build": "nuxt-ts build",
     "start": "nuxt-ts start",
-    "generate": "nuxt-ts generate",
-    "heroku-postbuild": "npm run build"
+    "generate": "nuxt-ts generate"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
