@@ -8,7 +8,7 @@
     "connect": "mongod --dbpath C:/Users/a0972/mongodb_data",
     "dev": "env-cmd -f ./config/dev.env nuxt-ts",
     "build": "nuxt-ts build",
-    "start": "nuxt-ts start",
+    "start": "nuxt-ts build && nuxt-ts start",
     "generate": "nuxt-ts generate",
     "heroku-postbuild": "npm run build"
   },
