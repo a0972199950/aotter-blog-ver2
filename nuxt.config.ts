@@ -2,6 +2,7 @@ import { Configuration } from '@nuxt/types';
 
 console.log("HOST: " + process.env.HOST);
 console.log("PORT: " + process.env.PORT);
+console.log("API_HOST: " + process.env.API_HOST);
 
 const config: Configuration = {
   mode: 'universal',
@@ -78,6 +79,8 @@ const config: Configuration = {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
+    baseURL: `http://${process.env.HOST}:${process.env.port}`,
+    browserBaseURL: `http://${process.env.HOST}:${process.env.port}/api`
   },
   /*
    ** Build configuration
@@ -93,10 +96,10 @@ const config: Configuration = {
   // serverMiddleware: [
   //   { path: "/api", handler: "~/server/index.ts" }
   // ]
-  // server: {
-  //   port: process.env.PORT || 3000, // default: 3000
-  //   host: process.env.HOST || "localhost", // default: 'localhost'
-  // },
+  server: {
+    port: process.env.PORT || 3000, // default: 3000
+    host: process.env.HOST || "localhost", // default: 'localhost'
+  },
 }
 
 export default config;
