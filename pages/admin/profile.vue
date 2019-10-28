@@ -65,13 +65,14 @@ export default class AdminProfile extends Vue {
 
     asyncData(context: Context): IData | void {
         const store: Store<IState> = context.store;
-        const user = store.state.user;
+        const user = store.getters.user;
+
         if(user){
             return {
                 avatarUrl: user.avatarUrl,
                 formData: {
                     name: user.name,
-                    socialMedias: user.socialMedias || {
+                    socialMedias: Object.assign({}, user.socialMedias) || {
                         facebook: null,
                         twitter: null,
                         instagram: null

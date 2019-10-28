@@ -8,7 +8,7 @@
 
         <div v-if="isLoggedIn">
             <h3 class="font-weight-bold">張貼留言</h3>
-            <textarea v-model="text" class="form-control" rows="2"></textarea>
+            <textarea :value="text" @input="onInput" class="form-control" rows="2"></textarea>
             <div class="text-right mt-3">
                 <button class="btn btn-primary" @click="save">送出</button>
             </div>
@@ -17,23 +17,28 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "nuxt-property-decorator";
+import { Component, Vue, Prop } from "nuxt-property-decorator";
 import { ICommentClient } from "~/interfaces/basic";
 
-interface IData {
+interface IProp {
     text: ICommentClient["text"] | null
 }
 
 @Component
 export default class CommentForm extends Vue {
-    text: IData["text"] = null
+    @Prop({ type: String, default: "" })
+    text!: IProp["text"]
 
     get isLoggedIn(): boolean {
         return !!this.$store.state.user;
     }
 
+    onInput(e: any): void {
+        this.$emit("input", e.target.value);
+    }
+
     save(): void {
-        this.$emit("save", this.text);
+        this.$emit("save");
     }
 }
 </script>

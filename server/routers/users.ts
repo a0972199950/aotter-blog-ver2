@@ -26,6 +26,9 @@ router.get("/logout", Auth.requireLogin, UsersController.logout);
 // 登出所有裝置
 router.get("/logout/all", Auth.requireLogin, UsersController.logoutAll);
 
+// 新增好友
+router.post("/friends", Auth.requireLogin, UsersController.addFriend);
+
 // 讀取頭像
 router.get("/:userId/avatar", UsersController.fetchAvatar);
 

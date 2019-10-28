@@ -14,7 +14,7 @@
             <div ref="content"></div>
 
             <hr class="mt-5">
-            <CommentForm @save="createComment" />
+            <CommentForm :text="text" v-model="text" @save="createComment" />
 
             <hr class="mt-5">
             <Comments :comments="comments" />
@@ -31,6 +31,12 @@ import { IPostClient, ICommentClient } from "~/interfaces/basic";
 interface IData {
     post: IPostClient | null
     comments: ICommentClient[]
+    text: ICommentClient["text"] | null
+}
+
+interface IAsyncDataReturn {
+    post: IData["post"]
+    comments: IData["comments"]
 }
 
 @Component({
@@ -45,12 +51,14 @@ export default class Post_postId extends Vue {
 
     comments: IData["comments"] = []
 
+    text: IData["text"] = ""
+
     get postContentHTML(): string {
         if(!this.post) return "";
         return new QuillDeltaToHtmlConverter(this.post.content).convert();
     }
 
-    async asyncData(context: Context): Promise<IData | void> {
+    async asyncData(context: Context): Promise<IAsyncDataReturn | void> {
         const { app, params, redirect } = context;
         const postId = params.postId;
 
@@ -70,12 +78,15 @@ export default class Post_postId extends Vue {
         }
     }
 
-    async createComment(text: string): Promise<void> {
+    async createComment(): Promise<void> {
         const postId = this.post!._id;
 
         try {
-            await this.$axios.$post(`/api/comments/post/${postId}`, { text });
-            this.$router.go(0);
+            await this.$axios.$post(`/api/comments/post/${postId}`, { text: this.text });
+            const { comments }: { comments: IData["comments"] } = await this.$axios.$get(`/api/posts/${postId}`);
+            this.comments = comments;
+            this.text = "";
+            this.$swal.fire("留言成功", "", "success");
         } catch(e) {
             console.log(e);
             this.$swal.fire("留言失敗", e.response.data.message, "error");

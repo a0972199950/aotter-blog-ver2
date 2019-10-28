@@ -112,26 +112,6 @@ class UsersController{
         }
     }
 
-    // 讀取頭像
-    public async fetchAvatar(req: Request, res: Response): Promise<Response | void> {
-        const userId: string = req.params.userId;
-
-        try {
-            const user = await User
-                .findById(userId)
-                .select("avatar")
-                .exec();
-
-            if(!user) return res.status(404).json({ error: "找不到User" });
-
-            const avatar = user.avatar || fs.readFileSync(path.join(__dirname, "../../static/image/avatar-default.jpg"));
-            res.set("Content-Type", "image/jpeg");
-            res.send(avatar);
-        } catch(e){
-            res.status(500).json({ message: e.message });
-        }
-    }
-
     // 登出目前裝置
     public async logout(req: IReqThroughMiddleware, res: Response): Promise<Response | void> {
         const token: string = req.signedCookies.ab_token;
@@ -162,6 +142,41 @@ class UsersController{
             res
                 .clearCookie("ab_token")
                 .json({ message: "登出成功" });
+        } catch(e){
+            res.status(500).json({ message: e.message });
+        }
+    }
+
+    // 新增好友
+    public async addFriend(req: IReqThroughMiddleware, res: Response): Promise<Response | void> {
+        const user = req.user!;
+        const friendId = req.body.friendId
+
+        user.friends = user.friends.concat(friendId);
+
+        try {
+            await user.save();
+            res.json({ user });
+        } catch(e){
+            res.status(500).json({ message: e.message });
+        }
+    }
+
+    // 讀取頭像
+    public async fetchAvatar(req: Request, res: Response): Promise<Response | void> {
+        const userId: string = req.params.userId;
+
+        try {
+            const user = await User
+                .findById(userId)
+                .select("avatar")
+                .exec();
+
+            if(!user) return res.status(404).json({ error: "找不到User" });
+
+            const avatar = user.avatar || fs.readFileSync(path.join(__dirname, "../../static/image/avatar-default.jpg"));
+            res.set("Content-Type", "image/jpeg");
+            res.send(avatar);
         } catch(e){
             res.status(500).json({ message: e.message });
         }

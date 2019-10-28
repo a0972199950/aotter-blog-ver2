@@ -22,23 +22,21 @@
                                 <div 
                                     v-for="(post, index) in posts"
                                     :key="index"
-                                    class="col-md-6 col-xl-4 mb-3">
+                                    class="col-md-6 col-xl-4 d-flex mb-3">
 
-                                    <nuxt-link :to="`/posts/${post._id}`">
-                                        <div class="card rounded-0 post">
-                                            <div class="card-header p-0">
-                                                <img :src="post.coverUrl">
-                                            </div>
-                                            <div class="card-body pb-2">
-                                                <h5 class="card-title mb-3">{{ post.title }}</h5>
+                                    <nuxt-link :to="`/posts/${post._id}`" class="card rounded-0 post">
+                                        <div class="card-header p-0">
+                                            <img :src="post.coverUrl">
+                                        </div>
+                                        <div class="card-body d-flex flex-column justify-content-between pb-2">
+                                            <h5 class="card-title mb-3">{{ post.title }}</h5>
 
-                                                <div class="d-flex justify-content-between">
-                                                    <p class="m-0">{{ post.updatedAt | dateFormatter("YYYY-MM-DD HH:mm") }}</p>
-                                                    <p class="m-0">
-                                                        <font-awesome-icon :icon="['fas', 'eye']" />
-                                                        {{ post.views }}
-                                                    </p>
-                                                </div>
+                                            <div class="d-flex justify-content-between">
+                                                <p class="m-0">{{ post.updatedAt | dateFormatter("YYYY-MM-DD HH:mm") }}</p>
+                                                <p class="m-0">
+                                                    <font-awesome-icon :icon="['fas', 'eye']" />
+                                                    {{ post.views }}
+                                                </p>
                                             </div>
                                         </div>
                                     </nuxt-link>

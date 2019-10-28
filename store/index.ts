@@ -1,5 +1,5 @@
 import { Context } from "@nuxt/types"
-import { MutationTree, ActionTree, ActionContext } from "vuex";
+import { GetterTree, MutationTree, ActionTree, ActionContext } from "vuex";
 import { IUserClient, IBlogClient } from "~/interfaces/basic";
 
 
@@ -13,22 +13,26 @@ export const state = (): IState => ({
   blog: null
 });
 
+export const getters: GetterTree<IState, IState> = {
+	user: state => state.user
+}
+
 export const mutations: MutationTree<IState> = {
-  SET_USER(state: IState, user: IUserClient){
-    state.user = user;
-  },
+	SET_USER(state: IState, user: IUserClient){
+		state.user = user;
+	},
 
-  CLEAR_USER(state: IState){
-    state.user = null;
-  },
+	CLEAR_USER(state: IState){
+		state.user = null;
+	},
 
-  SET_BLOG(state: IState, blog: IBlogClient){
-    state.blog = blog
-  },
+	SET_BLOG(state: IState, blog: IBlogClient){
+		state.blog = blog
+	},
 
-  CLEAR_BLOG(state: IState){
-    state.blog = null;
-  },
+	CLEAR_BLOG(state: IState){
+		state.blog = null;
+	},
 };
 
 interface ISignupData {

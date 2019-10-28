@@ -36,6 +36,7 @@ export interface IUser extends IDocument {
     blog: IBlog["_id"] | IBlog
     posts: IPost[]
     comments: IComment[]
+    friends: IUser[]
 }
 
 export interface IBlog extends IDocument{
@@ -76,7 +77,8 @@ export interface IUserClient extends IDocument {
     birthday: IUser["birthday"]
     phone: IUser["phone"]
     socialMedias: IUser["socialMedias"]
-    blog: string
+    blog: string,
+    friends: IUserClient[]
 }
 
 export interface IBlogClient extends IDocument {

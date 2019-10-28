@@ -1,10 +1,10 @@
 <template>
-    <div class="card text-center mb-5 mt-5 mb-md-0">
+    <div class="card text-center w-100">
         <div class="avatar">
             <img :src="blog.author.avatarUrl">
         </div>
         
-        <div class="card-body pb-0">
+        <div class="card-body d-flex flex-column justify-content-between">
             <nuxt-link :to="`/blogs/${blog._id}`">
                 <h3 class="blog-name">{{ blog.name }}</h3>
                 <h5 class="name">{{ blog.author.name || "匿名" }}</h5>
@@ -12,19 +12,19 @@
             </nuxt-link>
 
             <div class="d-flex justify-content-center">
-                <div v-if="blog.author.socialMedias.facebook" class="p-3">
+                <div v-if="blog.author.socialMedias.facebook" class="px-3 py-0">
                     <a :href="blog.author.socialMedias.facebook" target="blank">
                         <font-awesome-icon :icon="['fab', 'facebook']" />
                     </a>
                 </div>
 
-                <div v-if="blog.author.socialMedias.twitter" class="p-3">
+                <div v-if="blog.author.socialMedias.twitter" class="px-3 py-0">
                     <a :href="blog.author.socialMedias.twitter" target="blank">
                         <font-awesome-icon :icon="['fab', 'twitter']" />
                     </a>
                 </div>
 
-                <div v-if="blog.author.socialMedias.instagram" class="p-3">
+                <div v-if="blog.author.socialMedias.instagram" class="px-3 py-0">
                     <a :href="blog.author.socialMedias.instagram" target="blank">
                         <font-awesome-icon :icon="['fab', 'instagram']" />
                     </a>

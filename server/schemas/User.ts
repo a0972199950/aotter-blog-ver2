@@ -69,9 +69,16 @@ const createSchemaDefinition = (): SchemaDefinition => {
     const blog: SchemaTypeOpts<any> = {
         type: Schema.Types.ObjectId,
         ref: "Blog"
-    }
+    };
 
-    return { email, password, name, avatar, avatarUrl, birthday, phone, socialMedias, tokens, blog }
+    const friends: SchemaTypeOpts<any>[] = [
+        { 
+            type: Schema.Types.ObjectId,
+            ref: "User"
+        }
+    ]
+
+    return { email, password, name, avatar, avatarUrl, birthday, phone, socialMedias, tokens, blog, friends }
 }
 
 const createSchemaOptions = (): SchemaOptions => ({
