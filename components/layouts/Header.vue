@@ -11,6 +11,7 @@
         <b-navbar-nav class="ml-auto">
             <b-nav-item-dropdown v-if="user" :text="user.email" right>
                 <b-dropdown-item :href="`/blogs/${user.blog}`">我的部落格</b-dropdown-item>
+                <b-dropdown-item href="/chats">聊天室</b-dropdown-item>
                 <b-dropdown-item href="/admin/blog">設定</b-dropdown-item>
             </b-nav-item-dropdown>
 

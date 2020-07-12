@@ -36,7 +36,7 @@ const config: Configuration = {
    ** Global CSS
    */
   css: [
-    "~/assets/scss/base.scss",
+    "~/assets/scss/app.scss",
     "quill/dist/quill.core.css",
     "quill/dist/quill.snow.css",
     "quill/dist/quill.bubble.css"

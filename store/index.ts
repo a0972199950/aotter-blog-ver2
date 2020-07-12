@@ -48,7 +48,7 @@ interface ILoginData {
 
 
 export const actions: ActionTree<IState, IState> = {
-	async nuxtServerInit(vuexContext: ActionContext<IState, IState>, context: Context): Promise<void>{
+	async nuxtServerInit(vuexContext: ActionContext<IState, IState>, context: Context): Promise<void> {
 		const { app } = context;
 
 		try {

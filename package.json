@@ -9,7 +9,8 @@
     "dev": "env-cmd -f ./config/dev.env nuxt-ts",
     "build": "nuxt-ts build",
     "start": "nuxt-ts start",
-    "generate": "nuxt-ts generate"
+    "generate": "nuxt-ts generate",
+    "wc": "vue-cli-service build --target wc --name author-card components/AuthorCard.vue"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
@@ -30,6 +31,7 @@
     "@types/sharp": "^0.22.3",
     "@types/validator": "^10.11.3",
     "@types/vuelidate": "^0.7.7",
+    "@vue/cli-service": "^4.1.2",
     "bcryptjs": "^2.4.3",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.3",

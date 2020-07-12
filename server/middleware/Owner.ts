@@ -3,9 +3,11 @@ import { IReqThroughMiddleware } from "../../interfaces/basic";
 import Post from "../models/Post";
 import Blog from "../models/Blog";
 import Comment from "../models/Comment";
+import Chat from "../models/Chat";
 import { IPostDocument } from "../schemas/Post";
 import { IBlogDocument } from "../schemas/Blog";
 import { ICommentDocument } from "../schemas/Comment";
+import { IChatDocument } from "../schemas/Chat";
 
 
 class Owner {
@@ -54,6 +56,24 @@ class Owner {
             if(comment.author.toString() !== userId.toString()) return res.status(403).json({ message: "只有留言者可以刪除留言" });
 
             req = Object.assign(req, { comment });
+            next();
+        } catch(e){
+            res.status(500).json({ message: e.message });
+        }
+    }
+
+    public static async checkChat(req: IReqThroughMiddleware, res: Response, next: NextFunction): Promise<Response | void> {
+        const chatId: string = req.params.chatId;
+        const userId = req.user!._id;
+
+        try {
+            const chat: IChatDocument | null = await Chat.findById(chatId);
+            if(!chat) return res.status(404).json({ message: "聊天室不存在" });
+
+            const members = chat.members;
+            if(!members.includes(chatId)) return res.status(403).json({ message: "你不屬於此聊天室成員" });
+
+            req = Object.assign(req, { chat });
             next();
         } catch(e){
             res.status(500).json({ message: e.message });

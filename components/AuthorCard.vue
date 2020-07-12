@@ -12,6 +12,12 @@
             </nuxt-link>
 
             <div class="d-flex justify-content-center">
+                <div class="px-3 py-0">
+                    <button @click="contact(blog.author._id)">
+                        <font-awesome-icon :icon="['fas', 'comment-dots']" />
+                    </button>
+                </div>
+
                 <div v-if="blog.author.socialMedias.facebook" class="px-3 py-0">
                     <a :href="blog.author.socialMedias.facebook" target="blank">
                         <font-awesome-icon :icon="['fab', 'facebook']" />
@@ -47,6 +53,15 @@ interface IProp {
 export default class AuthorCard extends Vue {
     @Prop({ type: Object, default: {} })
     readonly blog!: IProp["blog"]
+
+    async contact(userId: string){
+        try {
+            const roomData = await this.$axios.$post("/api/chats/createRoom", { liaisonId: userId });
+            this.$router.push(`/chats/${"foobar"}`)
+        } catch(e){
+            console.log(e.message);
+        }
+    }
 }
 </script>
 

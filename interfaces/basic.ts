@@ -4,11 +4,13 @@ import { IUserDocument } from "~/server/schemas/User";
 import { IBlogDocument } from "~/server/schemas/Blog";
 import { IPostDocument } from "~/server/schemas/Post";
 import { ICommentDocument } from "~/server/schemas/Comment";
+import { IChatDocument } from "~/server/schemas/Chat";
 
 export interface IReqThroughMiddleware extends Request{
     user?: IUserDocument
     post?: IPostDocument
     blog?: IBlogDocument
+    chat?: IChatDocument
     comment?: ICommentDocument
     file: Express.Multer.File
 }
@@ -66,6 +68,15 @@ export interface IComment extends IDocument {
     text: string
     author: IUser["_id"] | IUser
     belongToPost: IPost["_id"] | IPost
+}
+
+export interface IChat extends IDocument {
+    members: string[]
+    messages: {
+        author: string
+        content: string
+        createdAt: Date
+    }[]
 }
 
 

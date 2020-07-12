@@ -1,7 +1,7 @@
 <template>
     <section class="container mt-5 pt-5">
         <div class="row">
-            <div v-for="(blog, index) in blogs" :key="index" class="col-md-4 d-flex author-card-container">
+            <div v-for="(blog, index) in blogs" :key="index" class="col-md-3 d-flex author-card-container">
                 <AuthorCard :blog="blog" />
             </div>
         </div>
