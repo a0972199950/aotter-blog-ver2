@@ -63,8 +63,8 @@ class ChatsController {
         const chat = req.chat;
 
         try {
-            chat?.messages.push(message);
-            chat?.save();
+            chat!.messages.push(message);
+            chat!.save();
             res.json({ chat });
         } catch(e) {
             res.status(500).json({ message: e.message });
