@@ -4,6 +4,9 @@
   "description": "aotter-blog",
   "author": "a0972199950",
   "private": true,
+  "engines" : {
+    "node" : ">=12.0.0"
+  },
   "scripts": {
     "connect": "mongod --dbpath C:/Users/a0972/mongodb_data",
     "dev": "env-cmd -f ./config/dev.env nuxt-ts",
